@@ -43,7 +43,15 @@ class LandingPageView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height:5),
-              
+                Text(
+                  'With to Guide go. Embark on unforgettable adventures and discover hidden gems with us. Let us show you the wonders of our own sweet home, Nepal, and its thrilling adventures.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    
+                  )
+                ),
                 Spacer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
