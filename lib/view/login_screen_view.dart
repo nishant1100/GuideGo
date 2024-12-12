@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:guide_go/view/sign_up_view.dart';
 
-
-class LoginScreenView extends StatelessWidget {
+class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -107,7 +107,11 @@ class LoginScreenView extends StatelessWidget {
                     SizedBox(height: 0),
                     TextButton(
                       onPressed: () {
-                      //  
+                         // Navigate to the sign_up page.
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpView()),
+                      );
                       },
                       child: Text(
                         "Don't have an account? Create account",

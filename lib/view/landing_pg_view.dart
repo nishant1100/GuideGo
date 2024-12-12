@@ -60,7 +60,7 @@ class LandingPageView extends StatelessWidget {
                       // Navigate to the LoginScreen
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreenView()),
+                        MaterialPageRoute(builder: (context) => LoginView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
