@@ -105,7 +105,11 @@ class DashboardView extends StatelessWidget {
                       PlaceCard(image: 'assets/images/heritage.jpg',title: 'National Heritage'),
                       PlaceCard(image: 'assets/images/thrill.jpg',title: 'Feel the thrill'),
                       PlaceCard(image: 'assets/images/wildlife.jpg',title: 'Wildlife and Nature'),
-                      PlaceCard(image: 'assets/images/trek.jpg', title: 'Trekking Adventures')
+                      PlaceCard(image: 'assets/images/trek.jpg', title: 'Trekking Adventures'),
+                      PlaceCard(image: 'assets/images/spiritual.jpg', title: 'Spiritual Retreats'),
+                      PlaceCard(image: 'assets/images/homestay.jpeg', title: 'Village Stay'),
+                      PlaceCard(image: 'assets/images/food.jpeg', title: 'Street Food Tour'),
+
                       ],
                   ),
                 ),
