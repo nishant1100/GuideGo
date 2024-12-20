@@ -90,21 +90,21 @@ class LoginView extends StatelessWidget {
                               builder: (context) => DashboardView()),
                         );
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF9C27B0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        minimumSize: Size(
-                          screenWidth * 0.6, // 60% of screen width
-                          50, // Fixed height
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical:
-                              orientation == Orientation.portrait ? 15 : 10,
-                        ),
-                      ),
+                      // style: ElevatedButton.styleFrom(
+                      //   backgroundColor: const Color(0xFF9C27B0),
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(30),
+                      //   ),
+                      //   minimumSize: Size(
+                      //     screenWidth * 0.6, // 60% of screen width
+                      //     50, // Fixed height
+                      //   ),
+                      //   padding: EdgeInsets.symmetric(
+                      //     horizontal: 20,
+                      //     vertical:
+                      //         orientation == Orientation.portrait ? 15 : 10,
+                      //   ),
+                      // ),
                       child: Text(
                         'Sign In',
                         style: TextStyle(

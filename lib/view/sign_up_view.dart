@@ -35,6 +35,7 @@ class SignUpView extends StatelessWidget {
                   'Create Account',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    fontFamily: 'Montserrat Bold',
                     fontSize: screenWidth * 0.07,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -116,16 +117,16 @@ class SignUpView extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginView()),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF9C27B0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    minimumSize: Size(
-                      screenWidth * 0.6, // 60% of screen width
-                      50, // Fixed height
-                    ),
-                  ),
+                  // style: ElevatedButton.styleFrom(
+                  //   backgroundColor: const Color(0xFF9C27B0),
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(30),
+                  //   ),
+                  //   minimumSize: Size(
+                  //     screenWidth * 0.6, // 60% of screen width
+                  //     50, // Fixed height
+                  //   ),
+                  // ),
                   child: Text(
                     'Sign Up',
                     style: TextStyle(
