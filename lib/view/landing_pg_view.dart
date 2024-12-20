@@ -116,13 +116,13 @@ class OnboardingPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => LoginView()),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF9C27B0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                ),
+                // style: ElevatedButton.styleFrom(
+                //   backgroundColor: const Color(0xFF9C27B0),
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(30),
+                //   ),
+                //   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                // ),
                 child: Text(
                   'Hire Your Guide',
                   style: TextStyle(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DashboardView extends StatefulWidget {
+  const DashboardView({super.key});
+
   @override
   _DashboardViewState createState() => _DashboardViewState();
 }
@@ -15,9 +17,9 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   final List<Widget> _pages = [
-    DashboardContent(),
-    UserProfile(),
-    AboutUs(),
+    const DashboardContent(),
+    const UserProfile(),
+    const AboutUs(),
   ];
 
   @override
@@ -26,52 +28,36 @@ class _DashboardViewState extends State<DashboardView> {
       body: Stack(
         children: [
           IndexedStack(
-            index: _selectedIndex, // Maintain state of all pages
+            index: _selectedIndex,
             children: _pages,
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 5,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
+              child: BottomNavigationBar(
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Profile',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.info),
+                    label: 'About Us',
                   ),
                 ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
-                child: BottomNavigationBar(
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.person),
-                      label: 'Profile',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.info),
-                      label: 'About Us',
-                    ),
-                  ],
-                  currentIndex: _selectedIndex,
-                  backgroundColor: const Color(0xFF9C27B0),
-                  selectedItemColor: const Color(0xFF2196F3),
-                  unselectedItemColor: Colors.white,
-                  onTap: _onItemTapped,
-                ),
+                currentIndex: _selectedIndex,
+                backgroundColor: const Color(0xFFDE4DF7),
+                selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+                unselectedItemColor: Colors.white,
+                onTap: _onItemTapped,
               ),
             ),
           ),
@@ -82,12 +68,14 @@ class _DashboardViewState extends State<DashboardView> {
 }
 
 class DashboardContent extends StatelessWidget {
+  const DashboardContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF9C27B0), Color(0xFF2196F3)],
           begin: Alignment.topCenter,
@@ -103,8 +91,8 @@ class DashboardContent extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 40),
-                    Row(
+                    const SizedBox(height: 10),
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
@@ -129,20 +117,21 @@ class DashboardContent extends StatelessWidget {
                           ],
                         ),
                         CircleAvatar(
-                          radius: 25,
+                          radius: 30,
                           backgroundImage:
                               AssetImage('assets/images/profile.jpg'),
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     TextField(
                       decoration: InputDecoration(
                         hintText: "Start searching here...",
                         filled: true,
                         fillColor: Colors.white,
-                        prefixIcon: Icon(Icons.search, color: Colors.grey),
-                        suffixIcon: Icon(Icons.filter_alt_outlined,
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.grey),
+                        suffixIcon: const Icon(Icons.filter_alt_outlined,
                             color: Colors.grey),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -150,8 +139,8 @@ class DashboardContent extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
-                    Text(
+                    const SizedBox(height: 30),
+                    const Text(
                       "Discover Places",
                       style: TextStyle(
                         fontSize: 20,
@@ -159,29 +148,37 @@ class DashboardContent extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CategoryChip(label: "All", isSelected: true),
-                        CategoryChip(label: "Restaurants"),
-                        CategoryChip(label: "Parks"),
-                        CategoryChip(label: "Entertainment"),
-                      ],
+                    const SizedBox(height: 16),
+                    const SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CategoryChip(label: "All", isSelected: true),
+                          SizedBox(width: 8),
+                          CategoryChip(label: "Restaurants"),
+                          SizedBox(width: 8),
+                          CategoryChip(label: "Parks"),
+                          SizedBox(width: 8),
+                          CategoryChip(label: "Entertainment"),
+                          SizedBox(width: 8),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.fromLTRB(
+                    16.0, 0.0, 16.0, 80.0), // Add bottom padding here
                 child: GridView.count(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  children: [
+                  children: const [
                     PlaceCard(
                         image: 'assets/images/heritage.jpg',
                         title: 'National Heritage'),
@@ -203,6 +200,9 @@ class DashboardContent extends StatelessWidget {
                     PlaceCard(
                         image: 'assets/images/food.jpeg',
                         title: 'Street Food Tour'),
+                    PlaceCard(
+                        image: 'assets/images/lake.jpg',
+                        title: 'Lake and Rivers'),
                   ],
                 ),
               ),
@@ -219,6 +219,7 @@ class CategoryChip extends StatelessWidget {
   final bool isSelected;
 
   const CategoryChip({
+    super.key,
     required this.label,
     this.isSelected = false,
   });
@@ -226,9 +227,9 @@ class CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isSelected ? Colors.orange : Colors.white,
+        color: isSelected ? const Color(0xFFDE4DF7) : Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -247,6 +248,7 @@ class PlaceCard extends StatelessWidget {
   final String title;
 
   const PlaceCard({
+    super.key,
     required this.image,
     required this.title,
   });
@@ -271,29 +273,24 @@ class PlaceCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.6),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(bottom: Radius.circular(20)),
             ),
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 ElevatedButton(
                   onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: Text(
+                  child: const Text(
                     'Book Now',
                     style: TextStyle(
                       color: Colors.white,
@@ -311,18 +308,22 @@ class PlaceCard extends StatelessWidget {
 }
 
 class UserProfile extends StatelessWidget {
+  const UserProfile({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('User Profile Page', style: TextStyle(fontSize: 20)),
     );
   }
 }
 
 class AboutUs extends StatelessWidget {
+  const AboutUs({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('About Us Page', style: TextStyle(fontSize: 20)),
     );
   }

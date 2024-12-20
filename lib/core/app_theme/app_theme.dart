@@ -11,7 +11,7 @@ ThemeData getApplicationTheme() {
                   color: Colors.white,
                   fontWeight: FontWeight.w300,
                   fontFamily: 'Montserrat Bold'),
-              backgroundColor: Colors.purple,
+              backgroundColor: const Color(0xFFDE4DF7),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)))),
       inputDecorationTheme: const InputDecorationTheme(
