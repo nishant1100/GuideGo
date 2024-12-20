@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:guide_go/view/dashboard_view.dart';
 import 'package:guide_go/view/sign_up_view.dart';
 
 class LoginView extends StatelessWidget {
+  const LoginView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -11,9 +14,9 @@ class LoginView extends StatelessWidget {
       body: Container(
         width: screenWidth,
         height: screenHeight,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [const Color(0xFF9C27B0), const Color.fromRGBO(33, 150, 243, 1)],
+            colors: [Color(0xFF9C27B0), Color.fromRGBO(33, 150, 243, 1)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -34,7 +37,7 @@ class LoginView extends StatelessWidget {
                           ? screenHeight * 0.3
                           : screenHeight * 0.5, // Adjust logo size
                     ),
-                    SizedBox(height: 0),
+                    const SizedBox(height: 0),
                     Text(
                       'Happy to see you! Please enter your email and password to login to your account.',
                       textAlign: TextAlign.center,
@@ -43,11 +46,11 @@ class LoginView extends StatelessWidget {
                         fontSize: screenWidth * 0.04, // Responsive font size
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Email Address',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: const TextStyle(color: Colors.white),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                         border: OutlineInputBorder(
@@ -55,14 +58,14 @@ class LoginView extends StatelessWidget {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextField(
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Your Password',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: const TextStyle(color: Colors.white),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.1),
                         border: OutlineInputBorder(
@@ -70,17 +73,23 @@ class LoginView extends StatelessWidget {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Forgot Password?',
                       textAlign: TextAlign.right,
                       style: TextStyle(color: Colors.white),
                     ),
-                    SizedBox(height: 100),
+                    const SizedBox(height: 100),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DashboardView()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C27B0),
                         shape: RoundedRectangleBorder(
@@ -92,7 +101,8 @@ class LoginView extends StatelessWidget {
                         ),
                         padding: EdgeInsets.symmetric(
                           horizontal: 20,
-                          vertical: orientation == Orientation.portrait ? 15 : 10,
+                          vertical:
+                              orientation == Orientation.portrait ? 15 : 10,
                         ),
                       ),
                       child: Text(
@@ -104,16 +114,16 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 0),
+                    const SizedBox(height: 0),
                     TextButton(
                       onPressed: () {
-                         // Navigate to the sign_up page.
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUpView()),
-                      );
+                        // Navigate to the sign_up page.
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUpView()),
+                        );
                       },
-                      child: Text(
+                      child: const Text(
                         "Don't have an account? Create account",
                         style: TextStyle(color: Colors.white),
                       ),
