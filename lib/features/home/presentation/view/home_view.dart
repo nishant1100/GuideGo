@@ -27,12 +27,12 @@ class HomeView extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.exit_to_app),
+            icon: const Icon(Icons.logout_rounded),
             onPressed: () {
               // Logout code
               showMySnackBar(
                 context: context,
-                message: 'Logging out...',
+                message: 'Logging Out.',
                 color: Colors.red,
               );
 
@@ -82,18 +82,18 @@ class HomeView extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add functionality here, e.g., navigate to a new screen or trigger a key action
-          showMySnackBar(
-            context: context,
-            message: 'Quick action triggered!',
-            color: const Color(0xFF2196F3),
-          );
-        },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     // Add functionality here, e.g., navigate to a new screen or trigger a key action
+      //     showMySnackBar(
+      //       context: context,
+      //       message: 'Quick action triggered!',
+      //       colorr: const Color(0xFF2196F3),
+      //     );
+      //   },
+      //   backgroundColor: Colors.teal,
+      //   child: const Icon(Icons.add, color: Colors.white),
+      // ),
     );
   }
 }

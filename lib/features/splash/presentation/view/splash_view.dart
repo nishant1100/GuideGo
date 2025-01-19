@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:guide_go/features/splash/presentation/view_model/splash_cubit.dart';
 
 class SplashView extends StatefulWidget {
@@ -29,7 +30,7 @@ class _SplashViewState extends State<SplashView> {
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF3498DB), Color(0xFF2C3E50)],
+                colors: [Color(0xFF1434E9), Color(0xFFF13E3E)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -39,60 +40,33 @@ class _SplashViewState extends State<SplashView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Static Floating Logo
-                Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF2196F3), Color(0xFF9C27B0)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                // Animated App Name
+                SizedBox(
+                  height: 100,
+                  child: DefaultTextStyle(
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                    image: const DecorationImage(
-                      image: AssetImage(
-                          'assets/logo/guide_go.jpg'), // Path to the travel-themed image
-                      fit: BoxFit.cover,
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          'Guide Go',
+                          speed: const Duration(milliseconds: 350),
+                        ),
+                      ],
+                      totalRepeatCount: 1,
                     ),
                   ),
-                  child: Center(
-                    child: Text(
-                      'GG',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white.withOpacity(0.9),
-                        fontFamily: 'Roboto',
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // App name
-                const Text(
-                  'Guide Go',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'Hire Your Guide',
+                  'Hire Your Guide. Experience the Unseen',
                   style: TextStyle(
                     fontSize: 20,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white70,
+                    fontStyle: FontStyle.normal,
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -110,11 +84,11 @@ class _SplashViewState extends State<SplashView> {
             bottom: 20,
             width: MediaQuery.of(context).size.width,
             child: const Text(
-              'Enjoy and feel the nature with GG',
+              'Nepal awaits you! With Guide Go.',
               style: TextStyle(
                 fontSize: 16,
-                fontStyle: FontStyle.italic,
-                color: Colors.lightBlueAccent,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFF9FAFA),
               ),
               textAlign: TextAlign.center,
             ),

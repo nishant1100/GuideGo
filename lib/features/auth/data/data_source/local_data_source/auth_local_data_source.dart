@@ -18,7 +18,6 @@ class AuthLocalDataSource implements IAuthDataSource {
       userId: "1",
       fName: "",
       lName: "",
-      image: null,
       phone: "",
       username: "",
       password: "",
