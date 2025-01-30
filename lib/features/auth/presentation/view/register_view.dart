@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'terms_and_conditions.dart'; // Create a separate page for Terms and Conditions
-import 'login_view.dart'; // Make sure to create this page for login
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'terms_and_conditions.dart';
+import 'login_view.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -20,6 +21,7 @@ class _RegisterViewState extends State<RegisterView> {
   final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
   bool _termsAccepted = false;
+  File? _image;
 
   @override
   void initState() {
@@ -27,17 +29,57 @@ class _RegisterViewState extends State<RegisterView> {
     Hive.openBox('users'); // Open Hive box for users
   }
 
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+ void _showImagePickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera),
+                title: const Text('Take a Photo'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Choose from Gallery'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Background with Linear Gradient
+          // Background Gradient
           Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [const Color(0xFFF13E3E), const Color(0xFF1434E9)],
+                  colors: [Color(0xFFF13E3E), Color(0xFF1434E9)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -49,16 +91,26 @@ class _RegisterViewState extends State<RegisterView> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  const SizedBox(height: 0),
+                  const SizedBox(height: 20),
 
-                  // Logo Section
-                  Image.asset(
-                    'assets/logo/guide_go.png', // Add your logo path here
-                    width: 200,
-                    height: 180,
-                    fit: BoxFit.contain,
+                  // User Image Upload Section
+                  GestureDetector(
+                    onTap: _showImagePickerOptions,
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.white,
+                      backgroundImage: _image != null ? FileImage(_image!) : null,
+                      child: _image == null
+                          ? Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey[700],
+                              size: 40,
+                            )
+                          : null,
+                    ),
                   ),
 
+                  const SizedBox(height: 10),
                   const Text(
                     "Create Account",
                     style: TextStyle(
@@ -67,7 +119,7 @@ class _RegisterViewState extends State<RegisterView> {
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 0),
+                  const SizedBox(height: 5),
                   Center(
                     child: RichText(
                       textAlign: TextAlign.center,
@@ -75,11 +127,12 @@ class _RegisterViewState extends State<RegisterView> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: Colors.white,
                         ),
                         children: [
                           TextSpan(text: "To\n"),
-                          TextSpan(text: "embark adventures & discover hidden gems"),
+                          TextSpan(
+                              text: "embark adventures & discover hidden gems"),
                         ],
                       ),
                     ),
@@ -96,48 +149,32 @@ class _RegisterViewState extends State<RegisterView> {
                               controller: _fnameController,
                               labelText: 'First Name',
                               icon: Icons.person,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter first name';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Please enter first name' : null,
                             ),
                             _gap,
                             buildTextField(
                               controller: _lnameController,
                               labelText: 'Last Name',
                               icon: Icons.person_outline,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter last name';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Please enter last name' : null,
                             ),
                             _gap,
                             buildTextField(
                               controller: _phoneController,
                               labelText: 'Phone Number',
                               icon: Icons.phone,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter phone number';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Please enter phone number' : null,
                             ),
                             _gap,
                             buildTextField(
                               controller: _usernameController,
                               labelText: 'Username',
                               icon: Icons.account_circle,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter username';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Please enter username' : null,
                             ),
                             _gap,
                             buildTextField(
@@ -145,12 +182,8 @@ class _RegisterViewState extends State<RegisterView> {
                               labelText: 'Password',
                               icon: Icons.lock,
                               obscureText: true,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter password';
-                                }
-                                return null;
-                              },
+                              validator: (value) =>
+                                  value!.isEmpty ? 'Please enter password' : null,
                             ),
                             _gap,
                             Row(
@@ -166,11 +199,11 @@ class _RegisterViewState extends State<RegisterView> {
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
-                                      // Navigate to Terms and Conditions page
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const TermsAndConditionsPage(),
+                                          builder: (context) =>
+                                              const TermsAndConditionsPage(),
                                         ),
                                       );
                                     },
@@ -200,7 +233,8 @@ class _RegisterViewState extends State<RegisterView> {
                                   if (!_termsAccepted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        content: Text('You must accept the Terms and Conditions to register!'),
+                                        content: Text(
+                                            'You must accept the Terms and Conditions to register!'),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
@@ -231,11 +265,12 @@ class _RegisterViewState extends State<RegisterView> {
 
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Registration successful! Please log in.'),
+                                      content:
+                                          Text('Registration successful! Please log in.'),
                                       backgroundColor: Colors.green,
                                     ),
                                   );
-                                  Navigator.pushNamed(context, '/login'); // Navigate to login screen
+                                  Navigator.pushNamed(context, '/login');
                                 }
                               },
                               child: const Text(
@@ -247,7 +282,6 @@ class _RegisterViewState extends State<RegisterView> {
                               ),
                             ),
                             const SizedBox(height: 5),
-                            // Sign In TextButton
                             TextButton(
                               onPressed: () {
                                 Navigator.pushNamed(context, '/login');
@@ -296,10 +330,6 @@ class _RegisterViewState extends State<RegisterView> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
         ),
       ),
       style: const TextStyle(color: Colors.black),

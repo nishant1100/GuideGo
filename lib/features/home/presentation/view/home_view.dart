@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:guide_go/core/app_theme/common/snackbar/my_snackbar.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_cubit.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_state.dart';
@@ -29,13 +30,11 @@ class HomeView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout_rounded),
             onPressed: () {
-              // Logout code
               showMySnackBar(
                 context: context,
                 message: 'Logging Out.',
                 color: Colors.red,
               );
-
               context.read<HomeCubit>().logout(context);
             },
           ),
@@ -51,49 +50,25 @@ class HomeView extends StatelessWidget {
       ),
       bottomNavigationBar: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
-          return BottomNavigationBar(
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.place),
-                label: 'Place',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.rocket_launch_sharp),
-                label: 'About Us',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-            ],
-            currentIndex: state.selectedIndex,
-            selectedItemColor: const Color.fromARGB(255, 6, 68, 202),
-            unselectedItemColor: Colors.grey,
+          return CurvedNavigationBar(
             backgroundColor: Colors.white,
-            type: BottomNavigationBarType.fixed,
-            elevation: 10.0,
+            color: Colors.blueAccent,
+            buttonBackgroundColor: Colors.white,
+            height: 60,
+            animationDuration: const Duration(milliseconds: 300),
+            index: state.selectedIndex,
+            items: const [
+              Icon(Icons.home, size: 30, color: Colors.black),
+              Icon(Icons.place, size: 30, color: Colors.black),
+              Icon(Icons.rocket_launch_sharp, size: 30, color: Colors.black),
+              Icon(Icons.person, size: 30, color: Colors.black),
+            ],
             onTap: (index) {
               context.read<HomeCubit>().onTabTapped(index);
             },
           );
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Add functionality here, e.g., navigate to a new screen or trigger a key action
-      //     showMySnackBar(
-      //       context: context,
-      //       message: 'Quick action triggered!',
-      //       colorr: const Color(0xFF2196F3),
-      //     );
-      //   },
-      //   backgroundColor: Colors.teal,
-      //   child: const Icon(Icons.add, color: Colors.white),
-      // ),
     );
   }
 }
