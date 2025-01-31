@@ -150,14 +150,15 @@ checkCameraPermission() async {
                         );
                       },
                       child: SizedBox(
-                        width: 144, // Fixed width
-                        height: 144, // Fixed height
+                        width: 145, // Fixed width
+                        height: 145, // Fixed height
                         child: CircleAvatar(
-                          radius: 52,
+                          backgroundColor: Colors.white,
+                          radius: 55,
                           backgroundImage: _img != null
                               ? FileImage(_img!)
                               : const AssetImage(
-                                      'assets/images/backgroundless_logo.png')
+                                      'assets/logo/user.png')
                                   as ImageProvider,
                         ),
                       ),
