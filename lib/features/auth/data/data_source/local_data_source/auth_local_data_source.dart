@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:guide_go/core/network/hive_service.dart';
-import 'package:guide_go/features/auth/data/data_source/local_data_source/auth_data_source.dart';
+import 'package:guide_go/features/auth/data/data_source/auth_data_source.dart';
 import 'package:guide_go/features/auth/data/model/auth_user_model.dart';
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
 
@@ -16,8 +16,7 @@ class AuthLocalDataSource implements IAuthDataSource {
     // Return Empty AuthEntity
     return Future.value(AuthEntity(
       userId: "1",
-      fName: "",
-      lName: "",
+      full_Name: "",
       phone: "",
       username: "",
       password: "",
@@ -25,7 +24,7 @@ class AuthLocalDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<String> loginStudent(String username, String password) async {
+  Future<String> loginUser(String username, String password) async {
     try {
       final user = await _hiveService.login(username, password);
       return Future.value("Login successful");
@@ -35,10 +34,10 @@ class AuthLocalDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<void> registerStudent(AuthEntity student) async {
+  Future<void> registerUser(AuthEntity user) async {
     try {
       // Convert AuthEntity to AuthHiveModel
-      final authHiveModel = AuthHiveModel.fromEntity(student);
+      final authHiveModel = AuthHiveModel.fromEntity(user);
 
       await _hiveService.register(authHiveModel);
       return Future.value();
@@ -51,4 +50,5 @@ class AuthLocalDataSource implements IAuthDataSource {
   Future<String> uploadProfilePicture(File file) {
     throw UnimplementedError();
   }
+  
 }

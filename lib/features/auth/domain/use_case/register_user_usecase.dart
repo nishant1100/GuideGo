@@ -7,32 +7,32 @@ import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
 import 'package:guide_go/features/auth/domain/repository/auth_repository.dart';
 
 class RegisterUserParams extends Equatable {
-  final String fname;
-  final String lname;
+  final String full_name;
   final String phone;
+  final String image;
   final String username;
   final String password;
 
   const RegisterUserParams({
-    required this.fname,
-    required this.lname,
+    required this.full_name,
     required this.phone,
+    required this.image,
     required this.username,
     required this.password,
   });
 
   //intial constructor
   const RegisterUserParams.initial({
-    required this.fname,
-    required this.lname,
+    required this.full_name,
     required this.phone,
+    required this.image,
     required this.username,
     required this.password,
   });
 
   @override
   List<Object?> get props =>
-      [fname, lname, phone, username, password];
+      [full_name,  phone, image, username, password];
 }
 
 class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
@@ -43,12 +43,12 @@ class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
     final authEntity = AuthEntity(
-      fName: params.fname,
-      lName: params.lname,
+      full_Name: params.full_name,
       phone: params.phone,
+      image: params.image,
       username: params.username,
       password: params.password,
     );
-    return repository.registerStudent(authEntity);
+    return repository.registerUser(authEntity);
   }
 }

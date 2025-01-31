@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guide_go/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:guide_go/features/auth/presentation/view_model/signup/register_event.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'terms_and_conditions.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'login_view.dart';
+import 'terms_and_conditions.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -15,8 +21,7 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _gap = const SizedBox(height: 16);
   final _key = GlobalKey<FormState>();
-  final _fnameController = TextEditingController(text: '');
-  final _lnameController = TextEditingController(text: '');
+  final _fullnameController = TextEditingController(text: '');
   final _phoneController = TextEditingController(text: '');
   final _usernameController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
@@ -29,43 +34,43 @@ class _RegisterViewState extends State<RegisterView> {
     Hive.openBox('users'); // Open Hive box for users
   }
 
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.isDenied) {
+      await Permission.camera.request();
     }
   }
 
- void _showImagePickerOptions() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera),
-                title: const Text('Take a Photo'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage(ImageSource.camera);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Choose from Gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage(ImageSource.gallery);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
+  File? _img;
+  String? imagePath;
+
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          imagePath = image.path.split('/').last;
+          print("path set $imagePath");
+          _img = File(image.path);
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _handleImageSelection(
+      BuildContext innercontext, ImageSource source) async {
+    await _browseImage(source);
+    print("Selected image: $_img");
+    if (_img != null) {
+      context.read<RegisterBloc>().add(
+            UploadImageEvent(context: context, img: _img!),
+          );
+    }
+    Navigator.pop(innercontext);
   }
 
 
@@ -92,24 +97,72 @@ class _RegisterViewState extends State<RegisterView> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-
-                  // User Image Upload Section
-                  GestureDetector(
-                    onTap: _showImagePickerOptions,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                      backgroundImage: _image != null ? FileImage(_image!) : null,
-                      child: _image == null
-                          ? Icon(
-                              Icons.camera_alt,
-                              color: Colors.grey[700],
-                              size: 40,
-                            )
-                          : null,
+                  Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          backgroundColor: Colors.grey[300],
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                          ),
+                          builder: (innercontext) => Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: SizedBox(
+                              width: double.infinity, // Constrain the width
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisSize:
+                                    MainAxisSize.min, // Prevent infinite width
+                                children: [
+                                  Flexible(
+                                    // Add Flexible to buttons
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _handleImageSelection(
+                                            context, ImageSource.camera);
+                                      },
+                                      icon: const Icon(Icons.camera),
+                                      label: const Text('Camera'),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    // Add Flexible to buttons
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        checkCameraPermission();
+                                        _handleImageSelection(
+                                            context, ImageSource.gallery);
+                                      },
+                                      icon: const Icon(Icons.image),
+                                      label: const Text('Gallery'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        width: 144, // Fixed width
+                        height: 144, // Fixed height
+                        child: CircleAvatar(
+                          radius: 52,
+                          backgroundImage: _img != null
+                              ? FileImage(_img!)
+                              : const AssetImage(
+                                      'assets/images/backgroundless_logo.png')
+                                  as ImageProvider,
+                        ),
+                      ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
                   const Text(
                     "Create Account",
@@ -146,35 +199,30 @@ class _RegisterViewState extends State<RegisterView> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             buildTextField(
-                              controller: _fnameController,
+                              controller: _fullnameController,
                               labelText: 'First Name',
                               icon: Icons.person,
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter first name' : null,
-                            ),
-                            _gap,
-                            buildTextField(
-                              controller: _lnameController,
-                              labelText: 'Last Name',
-                              icon: Icons.person_outline,
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter last name' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Please enter first name'
+                                  : null,
                             ),
                             _gap,
                             buildTextField(
                               controller: _phoneController,
                               labelText: 'Phone Number',
                               icon: Icons.phone,
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter phone number' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Please enter phone number'
+                                  : null,
                             ),
                             _gap,
                             buildTextField(
                               controller: _usernameController,
                               labelText: 'Username',
                               icon: Icons.account_circle,
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter username' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Please enter username'
+                                  : null,
                             ),
                             _gap,
                             buildTextField(
@@ -182,8 +230,9 @@ class _RegisterViewState extends State<RegisterView> {
                               labelText: 'Password',
                               icon: Icons.lock,
                               obscureText: true,
-                              validator: (value) =>
-                                  value!.isEmpty ? 'Please enter password' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Please enter password'
+                                  : null,
                             ),
                             _gap,
                             Row(
@@ -223,54 +272,32 @@ class _RegisterViewState extends State<RegisterView> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0x9DEB3838),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               onPressed: () async {
                                 if (_key.currentState!.validate()) {
-                                  if (!_termsAccepted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            'You must accept the Terms and Conditions to register!'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  final box = Hive.box('users');
-
-                                  if (box.containsKey(_usernameController.text)) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Username already exists!'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  await box.put(
-                                    _usernameController.text,
-                                    {
-                                      'firstName': _fnameController.text,
-                                      'lastName': _lnameController.text,
-                                      'phone': _phoneController.text,
-                                      'password': _passwordController.text,
-                                    },
-                                  );
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text('Registration successful! Please log in.'),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                  Navigator.pushNamed(context, '/login');
+                                  final RegisterState = 
+                                      context.read<RegisterBloc>().state;
+                                  final imageName = RegisterState.imageName;
+                                  // if (imagePath == null) {  
+                                  //   ScaffoldMessenger.of(context).showSnackBar(
+                                  //     const SnackBar(content: Text("Please select an image")),
+                                  //   );
+                                  //   return;
+                                  // }
+                                
+                                context.read<RegisterBloc>().add(RegisterUser(
+                                  context: context,
+                                  full_Name: _fullnameController.text,
+                                  username: _usernameController.text,
+                                  image: imagePath?? '',
+                                  phone: _phoneController.text,
+                                  password: _passwordController.text,
+                                  ));
                                 }
                               },
                               child: const Text(

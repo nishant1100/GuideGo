@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guide_go/core/app_theme/common/snackbar/my_snackbar.dart';
 import 'package:guide_go/features/auth/presentation/view/register_view.dart';
 import 'package:guide_go/features/auth/presentation/view_model/login/login_bloc.dart';
-import 'package:guide_go/features/home/presentation/view/home_view.dart';
 import 'package:hive/hive.dart';
 
 class LoginView extends StatefulWidget {
@@ -46,9 +44,9 @@ class _LoginViewState extends State<LoginView> {
             // Background Linear Gradient for travel theme
             Positioned.fill(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [const Color(0xFFF13E3E), const Color(0xFF1434E9)],
+                    colors: [Color(0xFFF13E3E), Color(0xFF1434E9)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -107,8 +105,8 @@ class _LoginViewState extends State<LoginView> {
                         key: const ValueKey('username'),
                         controller: _usernameController,
                         decoration: InputDecoration(
-                          prefixIcon:
-                              const Icon(Icons.person, color: Color(0xFF013D59)),
+                          prefixIcon: const Icon(Icons.person,
+                              color: Color(0xFF013D59)),
                           filled: true,
                           fillColor: Colors.white.withOpacity(0.9),
                           border: OutlineInputBorder(
@@ -149,8 +147,8 @@ class _LoginViewState extends State<LoginView> {
                                 controller: _passwordController,
                                 obscureText: !isPasswordVisible,
                                 decoration: InputDecoration(
-                                  prefixIcon:
-                                      const Icon(Icons.lock, color: Color(0xFF013D59)),
+                                  prefixIcon: const Icon(Icons.lock,
+                                      color: Color(0xFF013D59)),
                                   filled: true,
                                   fillColor: Colors.white.withOpacity(0.9),
                                   border: OutlineInputBorder(
@@ -203,24 +201,10 @@ class _LoginViewState extends State<LoginView> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            final box = Hive.box('users');
-                            final user = box.get(_usernameController.text);
-
-                            if (user != null &&
-                                user['password'] == _passwordController.text) {
-                              context.read<LoginBloc>().add(
-                                    NavigateHomeScreenEvent(
-                                      destination: const HomeView(),
-                                      context: context,
-                                    ),
-                                  );
-                            } else {
-                              showMySnackBar(
+                            context.read<LoginBloc>().add(LoginUserEvent(
                                 context: context,
-                                message: 'Invalid username or password',
-                                color: Colors.red,
-                              );
-                            }
+                                username: _usernameController.text,
+                                password: _passwordController.text));
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -246,7 +230,7 @@ class _LoginViewState extends State<LoginView> {
                         onPressed: () {
                           context.read<LoginBloc>().add(
                                 NavigateRegisterScreenEvent(
-                                  destination: RegisterView(),
+                                  destination: const RegisterView(),
                                   context: context,
                                 ),
                               );

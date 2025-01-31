@@ -22,7 +22,7 @@ class HomeView extends StatelessWidget {
           ),
         ),
         title: const Text(
-          'Home',
+          'Hire  Your Guide',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,

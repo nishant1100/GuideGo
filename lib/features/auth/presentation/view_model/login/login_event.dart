@@ -27,12 +27,14 @@ class NavigateHomeScreenEvent extends LoginEvent {
   });
 }
 
-class LoginStudentEvent extends LoginEvent {
-  final String email;
+class LoginUserEvent extends LoginEvent {
+  final BuildContext context;
+  final String username;
   final String password;
 
-  const LoginStudentEvent({
-    required this.email,
+  const LoginUserEvent({
+    required this.context,
+    required this.username,
     required this.password,
   });
 }

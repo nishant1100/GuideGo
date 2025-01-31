@@ -8,14 +8,14 @@ import 'package:uuid/uuid.dart';
 
 part 'auth_user_model.g.dart';
 
-@HiveType(typeId: HiveTableConstant.studentTableId)
+@HiveType(typeId: HiveTableConstant.userTableId)
 class AuthHiveModel extends Equatable {
   @HiveField(0)
-  final String? studentId;
+  final String? userId;
   @HiveField(1)
-  final String fName;
+  final String full_Name;
   @HiveField(2)
-  final String lName;
+
   @HiveField(3)
   final String? image;
   @HiveField(4)
@@ -26,20 +26,18 @@ class AuthHiveModel extends Equatable {
   final String password;
 
   AuthHiveModel({
-    String? studentId,
-    required this.fName,
-    required this.lName,
+    String? userId,
+    required this.full_Name,
     this.image,
     required this.phone,
     required this.username,
     required this.password,
-  }) : studentId = studentId ?? const Uuid().v4();
+  }) : userId = userId ?? const Uuid().v4();
 
   // Initial Constructor
   const AuthHiveModel.initial()
-      : studentId = '',
-        fName = '',
-        lName = '',
+      : userId = '',
+        full_Name = '',
         image = '',
         phone = '',
         username = '',
@@ -48,9 +46,8 @@ class AuthHiveModel extends Equatable {
   // From Entity
   factory AuthHiveModel.fromEntity(AuthEntity entity) {
     return AuthHiveModel(
-      studentId: entity.userId,
-      fName: entity.fName,
-      lName: entity.lName,
+      userId: entity.userId,
+      full_Name: entity.full_Name,
       image: entity.image,
       phone: entity.phone,
       username: entity.username,
@@ -61,9 +58,8 @@ class AuthHiveModel extends Equatable {
   // To Entity
   AuthEntity toEntity() {
     return AuthEntity(
-      userId: studentId,
-      fName: fName,
-      lName: lName,
+      userId: userId,
+      full_Name: full_Name,
       image: image,
       phone: phone,
       username: username,
@@ -73,5 +69,5 @@ class AuthHiveModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [studentId, fName, lName, image, username, password];
+      [userId, full_Name, image, username, password];
 }

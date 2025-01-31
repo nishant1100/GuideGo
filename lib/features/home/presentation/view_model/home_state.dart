@@ -1,5 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:guide_go/features/home/presentation/view/bottom_view/about_us.dart';
+import 'package:guide_go/features/home/presentation/view/bottom_view/dashboard_view.dart';
+import 'package:guide_go/features/home/presentation/view/bottom_view/placers._view.dart';
+import 'package:guide_go/features/home/presentation/view/bottom_view/user_profile.dart';
+
 class HomeState extends Equatable {
   final int selectedIndex;
   final List<Widget> views;
@@ -11,22 +16,13 @@ class HomeState extends Equatable {
 
   // Initial state
   static HomeState initial() {
-    return HomeState(
+    return const HomeState(
       selectedIndex: 0,
       views: [
-        const Center(
-          child: Text('Dashboard'),
-        ),
-       
-        const Center(
-          child: Text('Places'),
-        ),
-        const Center(
-          child: Text('About Us'),
-        ),
-        const Center(
-          child: Text('Profile'),
-        ),
+        DashboardView(),
+        PlacersView(),
+        UserProfile(),
+        AboutUs(),
       ],
     );
   }
