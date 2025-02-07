@@ -15,6 +15,7 @@ import 'package:guide_go/features/auth/presentation/view_model/login/login_bloc.
 import 'package:guide_go/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_cubit.dart';
 import 'package:guide_go/features/splash/presentation/view_model/splash_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -53,9 +54,12 @@ _initLoginDependencies() async {
     //  getIt.registerLazySingleton<TokenSharedPrefs>(
     //   () => TokenSharedPrefs(getIt<SharedPreferences>()));
 
+
+     //note  ==  // remove getit and update loginuse case to run UI.
   getIt.registerLazySingleton<LoginUsecase>(
     () => LoginUsecase(
       getIt<AuthRemoteRepository>(),
+      getIt(),
     ),
   );
 

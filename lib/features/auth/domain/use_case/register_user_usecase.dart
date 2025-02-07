@@ -1,6 +1,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
 import 'package:guide_go/app/usecase/usecase.dart';
 import 'package:guide_go/core/error/failure.dart';
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
@@ -37,6 +38,8 @@ class RegisterUserParams extends Equatable {
 
 class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
   final IAuthRepository repository;
+  //final TokenSharedPrefs tokenSharedPrefs;
+
 
   RegisterUseCase(this.repository);
 
