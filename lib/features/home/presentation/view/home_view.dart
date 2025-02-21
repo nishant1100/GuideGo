@@ -14,16 +14,12 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF9C27B0), Color(0xFF2196F3)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+              color:Color(0xFF9C27B0),
           ),
         ),
         title: const Text(
-          'Hire  Your Guide',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          'GUIDE GO',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         centerTitle: true,
         actions: [

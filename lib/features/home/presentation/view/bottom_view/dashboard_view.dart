@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guide_go/app/di/di.dart';
+import 'package:guide_go/features/booking/booking_view.dart';
+import 'package:guide_go/features/home/presentation/view_model/home_bloc.dart';
+import 'package:guide_go/features/home/presentation/view_model/home_event.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -37,32 +42,11 @@ class _DashboardViewState extends State<DashboardView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text(
-                            //   "Hello John!",
-                            //   style: TextStyle(
-                            //     fontSize: 24,
-                            //     fontWeight: FontWeight.bold,
-                            //     color: Colors.white,
-                            //   ),
-                            // ),
-                            // SizedBox(height: 4),
-                            // Text(
-                            //   "Address Here",
-                            //   style: TextStyle(
-                            //     fontSize: 16,
-                            //     color: Colors.white70,
-                            //   ),
-                            // ),
                           ],
                         ),
-                        // CircleAvatar(
-                        //   radius: 25,
-                        //   backgroundImage:
-                        //       AssetImage('assets/images/profile.jpg'),
-                        // ),
                       ],
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 0),
                     TextField(
                       decoration: InputDecoration(
                         hintText: "Start searching here...",
@@ -70,8 +54,7 @@ class _DashboardViewState extends State<DashboardView> {
                         fillColor: Colors.white,
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.grey),
-                        suffixIcon: const Icon(Icons.filter_alt_outlined,
-                            color: Colors.grey),
+
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
@@ -128,9 +111,7 @@ class _DashboardViewState extends State<DashboardView> {
                     PlaceCard(
                         image: 'assets/images/homestay.jpeg',
                         title: 'Village Stay'),
-                    PlaceCard(
-                        image: 'assets/images/food.jpeg',
-                        title: 'Street Food Tour'),
+                  
                   ],
                 ),
               ),
@@ -186,8 +167,10 @@ class PlaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+    
       children: [
         ClipRRect(
+          
           borderRadius: BorderRadius.circular(20),
           child: Image.asset(
             image,
@@ -219,7 +202,16 @@ class PlaceCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider.value(
+                                    value: getIt<HomeBloc>(),
+                                    child: const BookingView(),
+                                  ),
+                                ));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     shape: RoundedRectangleBorder(

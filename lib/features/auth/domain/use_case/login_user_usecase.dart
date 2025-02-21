@@ -23,9 +23,10 @@ class LoginParams extends Equatable {
 
 class LoginUsecase implements UsecaseWithParams<String,LoginParams>{
   final IAuthRepository repository;
-  final TokenSharedPrefs tokenSharedPrefs;
+  //final TokenSharedPrefs tokenSharedPrefs;
+  //,this.tokenSharedPrefs
 
-  LoginUsecase(this.repository,this.tokenSharedPrefs);
+  LoginUsecase(this.repository);
 
   @override
   Future<Either<Failure, String>> call(LoginParams params) {

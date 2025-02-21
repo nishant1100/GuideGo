@@ -13,6 +13,7 @@ import 'package:guide_go/features/auth/domain/use_case/register_user_usecase.dar
 import 'package:guide_go/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:guide_go/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:guide_go/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:guide_go/features/home/presentation/view_model/home_bloc.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_cubit.dart';
 import 'package:guide_go/features/splash/presentation/view_model/splash_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +60,7 @@ _initLoginDependencies() async {
   getIt.registerLazySingleton<LoginUsecase>(
     () => LoginUsecase(
       getIt<AuthRemoteRepository>(),
-      getIt(),
+      //getIt(),
     ),
   );
 
@@ -128,5 +129,8 @@ _initSplashDependencies()async{
 _initHomeDependencies() async {
   getIt.registerFactory<HomeCubit>(
     () => HomeCubit(),
+  );
+    getIt.registerFactory<HomeBloc>(
+    () => HomeBloc(),
   );
 }
