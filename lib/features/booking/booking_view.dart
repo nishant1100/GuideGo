@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guide_go/features/booking/guide_view.dart';
 
 class BookingView extends StatefulWidget {
   const BookingView({super.key});
@@ -223,7 +224,12 @@ class _BookingViewState extends State<BookingView> {
 
                     /// Hire a Guide Button
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const GuideView()),
+                    );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C27B0),
                         minimumSize: Size(double.infinity, 50),
