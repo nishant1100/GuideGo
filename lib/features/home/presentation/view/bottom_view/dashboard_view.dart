@@ -111,6 +111,9 @@ class _DashboardViewState extends State<DashboardView> {
                     PlaceCard(
                         image: 'assets/images/homestay.jpeg',
                         title: 'Village Stay'),
+                        PlaceCard(
+                        image: 'assets/images/homestay.jpeg',
+                        title: 'Village Stay'),
                   
                   ],
                 ),
