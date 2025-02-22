@@ -31,7 +31,7 @@ void main() {
     });
 
     test('should convert between Entity and Model correctly', () {
-      const entity = AuthEntity(
+      const entity = BookingEntity(
         //userId: '123',
         username: 'robinstha',
         full_Name: 'Robin Stha',

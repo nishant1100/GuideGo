@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/app/di/di.dart';
 import 'package:guide_go/features/booking/booking_view.dart';
+import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_bloc.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_event.dart';
 
@@ -207,7 +208,7 @@ class PlaceCard extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BlocProvider.value(
-                                    value: getIt<HomeBloc>(),
+                                    value: getIt<BookingBloc>(),
                                     child: const BookingView(),
                                   ),
                                 ));

@@ -10,7 +10,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
 
   AuthRemoteDataSource(this._dio);
   @override
-  Future<AuthEntity> getCurrentUser() {
+  Future<BookingEntity> getCurrentUser() {
     // TODO: implement getCurrentUser
     throw UnimplementedError();
   }
@@ -33,7 +33,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<void> registerUser(AuthEntity user) async {
+  Future<void> registerUser(BookingEntity user) async {
     try {
       print("remote data source ma image ${user.image}");
       Response response = await _dio.post(ApiEndpoints.registerUser, data: {
@@ -61,11 +61,11 @@ class AuthRemoteDataSource implements IAuthDataSource {
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap(
         {
-        "file": await MultipartFile.fromFile(
-          file.path,
-          filename: fileName, // Use the filename from the file path
-        ),
-      },
+          "file": await MultipartFile.fromFile(
+            file.path,
+            filename: fileName, // Use the filename from the file path
+          ),
+        },
       );
       Response response = await _dio.post(
         ApiEndpoints.uploadImage,

@@ -1,7 +1,5 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
 import 'package:guide_go/app/usecase/usecase.dart';
 import 'package:guide_go/core/error/failure.dart';
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
@@ -32,20 +30,18 @@ class RegisterUserParams extends Equatable {
   });
 
   @override
-  List<Object?> get props =>
-      [full_name,  phone, image, username, password];
+  List<Object?> get props => [full_name, phone, image, username, password];
 }
 
 class RegisterUseCase implements UsecaseWithParams<void, RegisterUserParams> {
   final IAuthRepository repository;
   //final TokenSharedPrefs tokenSharedPrefs;
 
-
   RegisterUseCase(this.repository);
 
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
-    final authEntity = AuthEntity(
+    final authEntity = BookingEntity(
       full_Name: params.full_name,
       phone: params.phone,
       image: params.image,

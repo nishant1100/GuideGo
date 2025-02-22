@@ -23,35 +23,31 @@ class AuthApiModel extends Equatable {
     required this.password,
   });
 
+  factory AuthApiModel.fromJson(Map<String, dynamic> json) =>
+      _$AuthApiModelFromJson(json);
 
-  factory AuthApiModel.fromJson(Map<String, dynamic> json)=> _$AuthApiModelFromJson(json);
+  Map<String, dynamic> toJson() => _$AuthApiModelToJson(this);
 
-
-  Map<String,dynamic> toJson()=> _$AuthApiModelToJson(this);
-
-
-  //to entity 
-  AuthEntity toEntity(){
-    return AuthEntity(
+  //to entity
+  BookingEntity toEntity() {
+    return BookingEntity(
       full_Name: full_name,
-       phone: phone, 
-       image: image,
-       username: username, 
-       password: password ?? '',
-       );
+      phone: phone,
+      image: image,
+      username: username,
+      password: password ?? '',
+    );
   }
 
-
-
   //from Entity
-  factory AuthApiModel.fromEntiy(AuthEntity entity){
+  factory AuthApiModel.fromEntiy(BookingEntity entity) {
     return AuthApiModel(
-      full_name: entity.full_Name, 
+      full_name: entity.full_Name,
       phone: entity.phone,
       image: entity.image,
-      username: entity.username, 
+      username: entity.username,
       password: entity.password,
-      );
+    );
   }
   @override
   // TODO: implement props

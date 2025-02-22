@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/features/booking/guide_view.dart';
+import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
+import 'package:guide_go/features/booking/presentation/view_model/booking/booking_event.dart';
 
 class BookingView extends StatefulWidget {
   const BookingView({super.key});
@@ -11,6 +14,7 @@ class BookingView extends StatefulWidget {
 class _BookingViewState extends State<BookingView> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  TextEditingController meetupPointController = TextEditingController();
   int peopleCount = 2;
   String pickupType = "On Foot";
 
@@ -209,6 +213,7 @@ class _BookingViewState extends State<BookingView> {
                       style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
                     TextField(
+                      controller: meetupPointController,
                       decoration: InputDecoration(
                         hintText: "Enter Your Pickup Location",
                         filled: true,
@@ -225,6 +230,15 @@ class _BookingViewState extends State<BookingView> {
                     /// Hire a Guide Button
                     ElevatedButton(
                       onPressed: () {
+                        context.read<BookingBloc>().add(BookGuideEvent(
+                          context: context,
+                          pickupDate: selectedDate.toString(),
+                          pickupTime: selectedTime.toString(),
+                          noofPeople: peopleCount.toString(),
+                          pickupType: pickupType,
+                          userId: "67b89dc6a2e9623437d7cb2f",
+                          pickupLocation: meetupPointController.text,
+                        ));
                         Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const GuideView()),

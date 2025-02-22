@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:guide_go/features/booking/conformation_view.dart';
 
 class GuideView extends StatelessWidget {
   const GuideView({super.key});
@@ -7,16 +8,16 @@ class GuideView extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> guides = [
       {"name": "Geeta", "image": "assets/images/guide1.jpeg", "rating": 4.4},
-      {"name": "Hari", "image": "assets/images/guide1.jpeg", "rating": 4.3},
-      {"name": "Suraj", "image": "assets/images/guide1.jpeg", "rating": 4.2},
-      {"name": "Deepak", "image": "assets/images/guide1.jpeg", "rating": 4.1},
-      {"name": "Nitu", "image": "assets/images/guide1.jpeg", "rating": 4.0},
-      {"name": "Geeta", "image": "assets/images/guide1.jpeg", "rating": 3.6},
+      {"name": "Hari", "image": "assets/images/guide2.jpeg", "rating": 4.3},
+      {"name": "Suraj", "image": "assets/images/guide3.jpeg", "rating": 4.2},
+      {"name": "Deepak", "image": "assets/images/guide4.jpeg", "rating": 4.1},
+      {"name": "Nitu", "image": "assets/images/guide5.jpeg", "rating": 4.0},
+      {"name": "Geeta", "image": "assets/images/guide6.jpeg", "rating": 3.6},
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Available Guides"),
+        title: const Text("Available Guides"),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
@@ -46,6 +47,23 @@ class GuideView extends StatelessWidget {
                 name: guide["name"],
                 image: guide["image"],
                 rating: guide["rating"],
+                onBookNow: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConfirmationView(
+                        guideName: guide["name"],
+                        guideImage: guide["image"],
+                        experience: "Exploring cultural heritage & local sites",
+                        selectedDate: DateTime.now(),
+                        selectedTime: TimeOfDay.now(),
+                        meetupPoint: "Thamel, Kathmandu",
+                        pickupType: "Hotel Pickup",
+                        totalAmount: 55.0,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -59,11 +77,13 @@ class GuideCard extends StatelessWidget {
   final String name;
   final String image;
   final double rating;
+  final VoidCallback onBookNow;
 
   const GuideCard({
     required this.name,
     required this.image,
     required this.rating,
+    required this.onBookNow,
     super.key,
   });
 
@@ -91,22 +111,24 @@ class GuideCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
+
+          // Star Rating Row
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < 5; i++)
-                Icon(
-                  Icons.star,
-                  color: i < rating ? Colors.orange : Colors.grey,
-                  size: 18,
-                ),
-              const SizedBox(width: 4),
-              Text(
-                "$rating/5",
-                style: const TextStyle(color: Colors.white),
-              ),
-            ],
+            children: List.generate(5, (index) {
+              double starValue = index + 1;
+              return Icon(
+                rating >= starValue
+                    ? Icons.star
+                    : rating >= starValue - 0.5
+                        ? Icons.star_half
+                        : Icons.star_border,
+                color: Colors.orange,
+                size: 18,
+              );
+            }),
           ),
+
           const SizedBox(height: 8),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -115,7 +137,7 @@ class GuideCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            onPressed: () {},
+            onPressed: onBookNow,
             child: const Text("Book Now"),
           ),
         ],

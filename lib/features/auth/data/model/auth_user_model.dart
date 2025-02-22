@@ -1,10 +1,8 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:guide_go/app/constants/hive_table_constant.dart';
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:uuid/uuid.dart';
-
 
 part 'auth_user_model.g.dart';
 
@@ -15,7 +13,6 @@ class AuthHiveModel extends Equatable {
   @HiveField(1)
   final String full_Name;
   @HiveField(2)
-
   @HiveField(3)
   final String? image;
   @HiveField(4)
@@ -44,7 +41,7 @@ class AuthHiveModel extends Equatable {
         password = '';
 
   // From Entity
-  factory AuthHiveModel.fromEntity(AuthEntity entity) {
+  factory AuthHiveModel.fromEntity(BookingEntity entity) {
     return AuthHiveModel(
       userId: entity.userId,
       full_Name: entity.full_Name,
@@ -56,8 +53,8 @@ class AuthHiveModel extends Equatable {
   }
 
   // To Entity
-  AuthEntity toEntity() {
-    return AuthEntity(
+  BookingEntity toEntity() {
+    return BookingEntity(
       userId: userId,
       full_Name: full_Name,
       image: image,
@@ -68,6 +65,5 @@ class AuthHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [userId, full_Name, image, username, password];
+  List<Object?> get props => [userId, full_Name, image, username, password];
 }

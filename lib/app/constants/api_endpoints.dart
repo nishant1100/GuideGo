@@ -11,4 +11,7 @@ class ApiEndpoints {
   static const String uploadImage = "/user/uploadimage";
 
 
+  static const String bookGuide = "/hire/";
+
+
 }

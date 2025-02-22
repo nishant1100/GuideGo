@@ -6,10 +6,10 @@ import 'package:guide_go/features/auth/data/data_source/local_data_source/auth_l
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
 import 'package:guide_go/features/auth/domain/repository/auth_repository.dart';
 
-class AuthLocalRepository implements IAuthRepository {
+class BookingLocalRepository implements IAuthRepository {
   final BookingLocalDataSource _authLocalDataSource;
 
-  AuthLocalRepository(this._authLocalDataSource);
+  BookingLocalRepository(this._authLocalDataSource);
 
   @override
   Future<Either<Failure, BookingEntity>> getCurrentUser() async {

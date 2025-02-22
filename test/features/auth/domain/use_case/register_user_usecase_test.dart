@@ -6,8 +6,6 @@ import 'package:guide_go/features/auth/domain/use_case/register_user_usecase.dar
 import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
 
-
-
 // Mock repository class
 class MockAuthRepository extends Mock implements IAuthRepository {}
 
@@ -20,7 +18,7 @@ void main() {
     repository = MockAuthRepository();
     usecase = RegisterUseCase(repository);
     // Register a fallback value for any AuthEntity mock
-    registerFallbackValue(const AuthEntity(
+    registerFallbackValue(const BookingEntity(
       userId: '',
       full_Name: '',
       image: '',
@@ -58,16 +56,16 @@ void main() {
   // Test case 2: Should return ApiFailure when registration fails
   test('should return ApiFailure when user registration fails', () async {
     // Arrange
-    final failure = ApiFailure(message: "Registration failed");
+    const failure = ApiFailure(message: "Registration failed");
     when(() => repository.registerUser(any())).thenAnswer(
-      (_) async => Left(failure),
+      (_) async => const Left(failure),
     );
 
     // Act
     final result = await usecase(params);
 
     // Assert
-    expect(result, Left(failure));
+    expect(result, const Left(failure));
     verify(() => repository.registerUser(any())).called(1);
     verifyNoMoreInteractions(repository);
   });

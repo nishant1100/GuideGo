@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guide_go/app/di/di.dart';
+import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/home/presentation/view/bottom_view/about_us.dart';
 import 'package:guide_go/features/home/presentation/view/bottom_view/dashboard_view.dart';
 import 'package:guide_go/features/home/presentation/view/bottom_view/placers._view.dart';
@@ -16,13 +19,16 @@ class HomeState extends Equatable {
 
   // Initial state
   static HomeState initial() {
-    return const HomeState(
+    return HomeState(
       selectedIndex: 0,
       views: [
-        DashboardView(),
-        PlacersView(),
-        UserProfile(),
-        AboutUs(),
+        BlocProvider(
+          create: (context) => getIt<BookingBloc>(),
+          child: const DashboardView(),
+        ),
+        const PlacersView(),
+        const UserProfile(),
+        const AboutUs(),
       ],
     );
   }
