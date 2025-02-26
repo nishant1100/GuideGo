@@ -205,40 +205,6 @@ class _ConfirmationViewState extends State<ConfirmationView> {
     );
   }
 
-  // Process Payment Function
-  // void processPayment() {
-  //   if (otpController.text.isEmpty) {
-  //     showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //               title: const Text("Error"),
-  //               content: const Text("Please enter your OTP"),
-  //               actions: [
-  //                 TextButton(
-  //                     onPressed: () {
-  //                       Navigator.pop(context);
-  //                     },
-  //                     child: const Text("OK"))
-  //               ],
-  //             ));
-  //     return;
-  //   }
-
-  //   // Show success message
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) => AlertDialog(
-  //             title: const Text("Success"),
-  //             content: Text("Payment completed via $selectedPayment."),
-  //             actions: [
-  //               TextButton(
-  //                   onPressed: () {
-  //                     Navigator.pop(context);
-  //                   },
-  //                   child: const Text("OK"))
-  //             ],
-  //           ));
-  // }
   void showSuccessModal(BuildContext context) {
   showDialog(
     context: context,
