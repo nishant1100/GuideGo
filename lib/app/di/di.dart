@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
 import 'package:guide_go/core/network/api_service.dart';
 import 'package:guide_go/core/network/hive_service.dart';
 import 'package:guide_go/features/auth/data/data_source/local_data_source/auth_local_data_source.dart';
@@ -16,13 +15,12 @@ import 'package:guide_go/features/auth/presentation/view_model/signup/register_b
 import 'package:guide_go/features/booking/data/data_source/remote_data_source/booking_remote_data_source.dart';
 import 'package:guide_go/features/booking/data/repository/auth_local_repository/booking_local_repository.dart';
 import 'package:guide_go/features/booking/data/repository/booking_remote_repository/booking_remote_repository.dart';
-import 'package:guide_go/features/booking/domain/repository/booking_repository.dart';
 import 'package:guide_go/features/booking/domain/use_case/booking_usecase.dart';
+import 'package:guide_go/features/booking/domain/use_case/get_all_guides_usecase.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_bloc.dart';
 import 'package:guide_go/features/home/presentation/view_model/home_cubit.dart';
 import 'package:guide_go/features/splash/presentation/view_model/splash_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
 
@@ -143,7 +141,8 @@ _initiBookingDependencies() async {
     () => BookingLocalRepository(getIt()),
   );
   getIt.registerLazySingleton<BookingRemoteRepository>(
-    () => BookingRemoteRepository(bookingRemoteDataSource: getIt<BookingRemoteDataSource>()),
+    () => BookingRemoteRepository(
+        bookingRemoteDataSource: getIt<BookingRemoteDataSource>()),
   );
 
   // // Register the IBookingRepository
@@ -155,13 +154,11 @@ _initiBookingDependencies() async {
   getIt.registerLazySingleton<BookingUsecase>(
     () => BookingUsecase(repository: getIt<BookingRemoteRepository>()),
   );
+  getIt.registerLazySingleton<GetAllGuidesUsecase>(
+      () => GetAllGuidesUsecase(repository: getIt<BookingRemoteRepository>()));
 
   // Register BookingBloc
   getIt.registerFactory<BookingBloc>(
-    () => BookingBloc(
-      bookingUsecase: getIt(),
-    
-    ),
+    () => BookingBloc(bookingUsecase: getIt(), getAllGuidesUsecase: getIt()),
   );
 }
-

@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guide_go/features/booking/guide_view.dart';
+import 'package:guide_go/app/di/di.dart';
+import 'package:guide_go/features/booking/conformation_view.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_event.dart';
+import 'package:guide_go/features/booking/presentation/view_model/booking/booking_state.dart';
 
 class BookingView extends StatefulWidget {
-  const BookingView({super.key});
+  final String image;
+  final String title;
+  final List<String> places;
+
+  const BookingView(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.places});
 
   @override
   State<BookingView> createState() => _BookingViewState();
@@ -17,6 +27,10 @@ class _BookingViewState extends State<BookingView> {
   TextEditingController meetupPointController = TextEditingController();
   int peopleCount = 2;
   String pickupType = "On Foot";
+  String? selectedGuideId; // To store the selected guide's ID
+  String guideName = '';
+  String guidePrice = '';
+  String guideImage = '';
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -62,7 +76,7 @@ class _BookingViewState extends State<BookingView> {
               Stack(
                 children: [
                   Image.asset(
-                    'assets/images/heritage.jpg',
+                    widget.image,
                     height: 250,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -71,8 +85,8 @@ class _BookingViewState extends State<BookingView> {
                     bottom: 16,
                     left: 16,
                     child: Text(
-                      "National Heritage",
-                      style: TextStyle(
+                      widget.title,
+                      style: const TextStyle(
                         fontSize: 38,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -86,19 +100,22 @@ class _BookingViewState extends State<BookingView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     const SizedBox(height: 10),
-                    Text(
-                      "Place: Bhaktapur Durbar Square",
-                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    ...widget.places.map(
+                      (e) => Text(
+                        e,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 22),
+                      ),
                     ),
-                    Text(
+
+                    const Text(
                       "Location: Bhaktapur, Nepal",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,),
+                        fontSize: 18,
+                      ),
                     ),
-
 
                     const SizedBox(height: 30),
 
@@ -109,38 +126,41 @@ class _BookingViewState extends State<BookingView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Date Selection",
-                              style: TextStyle(color: Colors.white, fontSize: 22),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 22),
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF2196F3),
                               ),
                               onPressed: () => _selectDate(context),
-                              child: Text("${selectedDate.toLocal()}".split(' ')[0]),
+                              child: Text(
+                                  "${selectedDate.toLocal()}".split(' ')[0]),
                             ),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Time Selection",
-                              style: TextStyle(color: Colors.white, fontSize: 22),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 22),
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF2196F3),
                               ),
                               onPressed: () => _selectTime(context),
-                              child: Text("${selectedTime.format(context)}"),
+                              child: Text(selectedTime.format(context)),
                             ),
                           ],
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 45),
 
                     /// Number of People & Pickup Type - Horizontal Row
@@ -150,23 +170,28 @@ class _BookingViewState extends State<BookingView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Number of People",
-                              style: TextStyle(color: Colors.white, fontSize: 22),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 22),
                             ),
                             Row(
                               children: [
                                 IconButton(
-                                  icon: Icon(Icons.remove, color: Colors.white),
+                                  icon: const Icon(Icons.remove,
+                                      color: Colors.white),
                                   onPressed: () {
                                     setState(() {
                                       if (peopleCount > 1) peopleCount--;
                                     });
                                   },
                                 ),
-                                Text("$peopleCount", style: TextStyle(color: Colors.white)),
+                                Text("$peopleCount",
+                                    style:
+                                        const TextStyle(color: Colors.white)),
                                 IconButton(
-                                  icon: Icon(Icons.add, color: Colors.white),
+                                  icon: const Icon(Icons.add,
+                                      color: Colors.white),
                                   onPressed: () {
                                     setState(() {
                                       peopleCount++;
@@ -180,9 +205,10 @@ class _BookingViewState extends State<BookingView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Pickup Type",
-                              style: TextStyle(color: Colors.white, fontSize: 22),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 22),
                             ),
                             DropdownButton<String>(
                               value: pickupType,
@@ -192,11 +218,16 @@ class _BookingViewState extends State<BookingView> {
                                   pickupType = newValue!;
                                 });
                               },
-                              items: <String>["On Foot", "By Car", "By Bike"]
-                                  .map<DropdownMenuItem<String>>((String value) {
+                              items: <String>[
+                                "On Foot",
+                                "By Car",
+                                "By Bike"
+                              ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
-                                  child: Text(value, style: TextStyle(color: Colors.white)),
+                                  child: Text(value,
+                                      style:
+                                          const TextStyle(color: Colors.white)),
                                 );
                               }).toList(),
                             ),
@@ -204,11 +235,11 @@ class _BookingViewState extends State<BookingView> {
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(height: 45),
 
                     /// Meetup Point
-                    Text(
+                    const Text(
                       "Meetup Point",
                       style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
@@ -225,30 +256,103 @@ class _BookingViewState extends State<BookingView> {
                       ),
                     ),
 
-                    const SizedBox(height: 105),
+                    const SizedBox(height: 30),
+
+                    /// Guide Selection
+                    const Text(
+                      "Select a Guide",
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                    ),
+                    const SizedBox(height: 10),
+                    BlocProvider(
+                      create: (_) =>
+                          getIt<BookingBloc>()..add(GetGudiesEvent()),
+                      child: BlocBuilder<BookingBloc, BookingState>(
+                        builder: (context, state) {
+                          if (state.isLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (state.isSuccess && state.guides != null) {
+                            final guides = state.guides!;
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: guides.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 0.8,
+                              ),
+                              itemBuilder: (context, index) {
+                                final guide = guides[index];
+                                return GuideCard(
+                                  name: guide.full_name,
+                                  image: guide.image,
+                                  rating: 2.3,
+                                  onBookNow: () {
+                                    setState(() {
+                                      selectedGuideId = guide.guideId;
+                                      guideName = guide.full_name;
+                                      guidePrice = guide.price;
+                                      guideImage = guide.image;
+                                    });
+                                  },
+                                );
+                              },
+                            );
+                          } else if (!state.isSuccess) {
+                            return const Center(
+                                child: Text('Failed to load guides.'));
+                          }
+                          return const Center(child: Text('Unknown State'));
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
 
                     /// Hire a Guide Button
                     ElevatedButton(
                       onPressed: () {
+                        if (selectedGuideId == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Please select a guide.")),
+                          );
+                          return;
+                        }
+
                         context.read<BookingBloc>().add(BookGuideEvent(
-                          context: context,
-                          pickupDate: selectedDate.toString(),
-                          pickupTime: selectedTime.toString(),
-                          noofPeople: peopleCount.toString(),
-                          pickupType: pickupType,
-                          userId: "67b89dc6a2e9623437d7cb2f",
-                          pickupLocation: meetupPointController.text,
-                        ));
+                              context: context,
+                              pickupDate: selectedDate.toString(),
+                              pickupTime: selectedTime.toString(),
+                              noofPeople: peopleCount.toString(),
+                              pickupType: pickupType,
+                              userId: "67b89dc6a2e9623437d7cb2f",
+                              guideId: selectedGuideId!,
+                              pickupLocation: meetupPointController.text,
+                            ));
+
                         Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const GuideView()),
-                    );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ConfirmationView(
+                                    guideName: guideName,
+                                    guideImage: guideImage,
+                                    selectedDate: selectedDate,
+                                    selectedTime: selectedTime,
+                                    meetupPoint: meetupPointController.text,
+                                    pickupType: pickupType,
+                                    totalAmount: double.parse(guidePrice))));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C27B0),
-                        minimumSize: Size(double.infinity, 50),
+                        minimumSize: const Size(double.infinity, 50),
                       ),
-                      child: Text("Hire a Guide", style: TextStyle(color: Colors.white)),
+                      child: const Text("Hire a Guide",
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -256,6 +360,76 @@ class _BookingViewState extends State<BookingView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class GuideCard extends StatelessWidget {
+  final String name;
+  final String image;
+  final double rating;
+  final VoidCallback onBookNow;
+
+  const GuideCard({
+    required this.name,
+    required this.image,
+    required this.rating,
+    required this.onBookNow,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white.withOpacity(0.2),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          CircleAvatar(
+            radius: 45,
+            backgroundImage: AssetImage(image),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 4), // Star Rating Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(5, (index) {
+              double starValue = index + 1;
+              return Icon(
+                rating >= starValue
+                    ? Icons.star
+                    : rating >= starValue - 0.5
+                        ? Icons.star_half
+                        : Icons.star_border,
+                color: Colors.orange,
+                size: 18,
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF9C27B0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: onBookNow,
+            child: const Text("Select Guide"),
+          ),
+        ],
       ),
     );
   }

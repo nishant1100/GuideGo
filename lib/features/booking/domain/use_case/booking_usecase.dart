@@ -13,42 +13,43 @@ class BookingParams extends Equatable {
   final String noofPeople;
   final String pickupType;
   final String pickupLocation;
+  final String guideId;
 
   const BookingParams(
-      { this.id,
-       this.userId,
+      {this.id,
+      this.userId,
       required this.pickupDate,
       required this.pickupTime,
       required this.noofPeople,
       required this.pickupType,
+      required this.guideId,
       required this.pickupLocation});
   @override
   // TODO: implement props
   List<Object?> get props => throw [];
 }
 
-class BookingUsecase implements UsecaseWithParams<void,BookingParams> {
+class BookingUsecase implements UsecaseWithParams<void, BookingParams> {
   final IBookingRepository repository;
 
   BookingUsecase({required this.repository});
   @override
   Future<Either<Failure, void>> call(BookingParams params) async {
-    try{
+    try {
       await repository.book(BookGuideEntity(
-        id: params.id,
-        userId: params.userId,
-        pickupDate: params.pickupDate,
-        pickupTime: params.pickupTime,
-        noofPeople: params.noofPeople,
-        pickupType: params.pickupType,
-        pickupLocation: params.pickupLocation
-      ));
+          id: params.id,
+          userId: params.userId,
+          pickupDate: params.pickupDate,
+          pickupTime: params.pickupTime,
+          noofPeople: params.noofPeople,
+          guideId: params.guideId,
+          pickupType: params.pickupType,
+          pickupLocation: params.pickupLocation));
       return const Right(null);
-    }
-
-    catch(e){
+    } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }
   }
-  
+
+
 }

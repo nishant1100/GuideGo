@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class ConfirmationView extends StatefulWidget {
   final String guideName;
   final String guideImage;
-  final String experience;
   final DateTime selectedDate;
   final TimeOfDay selectedTime;
   final String meetupPoint;
@@ -14,7 +13,6 @@ class ConfirmationView extends StatefulWidget {
     super.key,
     required this.guideName,
     required this.guideImage,
-    required this.experience,
     required this.selectedDate,
     required this.selectedTime,
     required this.meetupPoint,
@@ -34,7 +32,7 @@ class _ConfirmationViewState extends State<ConfirmationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Make Payment"),
+        title: const Text("Hiring Deatils"),
         backgroundColor: const Color(0xFF9C27B0),
         elevation: 0,
       ),
@@ -137,12 +135,12 @@ class _ConfirmationViewState extends State<ConfirmationView> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          //processPayment();
+                          showSuccessModal(context);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF9C27B0),
                         ),
-                        child: const Text("Make Payment", style: TextStyle(color: Colors.white)),
+                        child: const Text("Confirm Hiring", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
@@ -241,4 +239,39 @@ class _ConfirmationViewState extends State<ConfirmationView> {
   //             ],
   //           ));
   // }
+  void showSuccessModal(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        title: const Text("Hiring Successful"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle, color: Colors.green, size: 60),
+            const SizedBox(height: 10),
+            const Text("Your booking has been confirmed."),
+            const SizedBox(height: 10),
+            Text("Guide: ${widget.guideName}", style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text("Total: NRP ${widget.totalAmount}", style: const TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+              Navigator.pop(context); // Go back to the previous page
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 }

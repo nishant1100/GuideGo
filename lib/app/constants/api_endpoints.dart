@@ -12,6 +12,6 @@ class ApiEndpoints {
 
 
   static const String bookGuide = "/hire/";
-
+  static const String getAllGuides = "/guide/guides";
 
 }

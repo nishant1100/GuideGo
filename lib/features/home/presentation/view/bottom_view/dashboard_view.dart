@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/app/di/di.dart';
 import 'package:guide_go/features/booking/booking_view.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
-import 'package:guide_go/features/home/presentation/view_model/home_bloc.dart';
-import 'package:guide_go/features/home/presentation/view_model/home_event.dart';
+import 'package:guide_go/features/booking/presentation/view_model/booking/booking_event.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -14,7 +13,6 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,8 +40,7 @@ class _DashboardViewState extends State<DashboardView> {
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                          ],
+                          children: [],
                         ),
                       ],
                     ),
@@ -55,7 +52,6 @@ class _DashboardViewState extends State<DashboardView> {
                         fillColor: Colors.white,
                         prefixIcon:
                             const Icon(Icons.search, color: Colors.grey),
-
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
@@ -95,24 +91,43 @@ class _DashboardViewState extends State<DashboardView> {
                   mainAxisSpacing: 16,
                   children: const [
                     PlaceCard(
-                        image: 'assets/images/heritage.jpg',
-                        title: 'National Heritage'),
+                      image: 'assets/images/heritage.jpg',
+                      title: 'National Heritage',
+                      places: ['Bhaktapur', 'Patan Durbar Square', 'Lumbini'],
+                    ),
                     PlaceCard(
-                        image: 'assets/images/thrill.jpg',
-                        title: 'Feel the thrill'),
+                      image: 'assets/images/thrill.jpg',
+                      title: 'Feel the thrill',
+                      places: ['Pokhara', 'Annapurna Circuit', 'Chitwan'],
+                    ),
                     PlaceCard(
                         image: 'assets/images/wildlife.jpg',
-                        title: 'Wildlife and Nature'),
+                        title: 'Wildlife and Nature',
+                        places: [
+                          'Chitwan National Park',
+                          'Bardia National Park',
+                          'Shivapuri'
+                        ]),
                     PlaceCard(
                         image: 'assets/images/trek.jpg',
-                        title: 'Trekking Adventures'),
+                        title: 'Trekking Adventures',
+                        places: [
+                          'Everest Base Camp',
+                          'Annapurna Base Camp',
+                          'Langtang'
+                        ]),
                     PlaceCard(
                         image: 'assets/images/spiritual.jpg',
-                        title: 'Spiritual Retreats'),
+                        title: 'Spiritual Retreats',
+                        places: [
+                          'Pashupatinath Temple',
+                          'Muktinath',
+                          'Lumbini'
+                        ]),
                     PlaceCard(
                         image: 'assets/images/homestay.jpeg',
-                        title: 'Village Stay'),
-                  
+                        title: 'Village Stay',
+                        places: ['Ghandruk', 'Bandipur', 'Tansen']),
                   ],
                 ),
               ),
@@ -123,8 +138,6 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 }
-
-
 
 class CategoryChip extends StatelessWidget {
   final String label;
@@ -158,20 +171,20 @@ class CategoryChip extends StatelessWidget {
 class PlaceCard extends StatelessWidget {
   final String image;
   final String title;
+  final List<String> places;
 
   const PlaceCard({
     super.key,
     required this.image,
+    required this.places,
     required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-    
       children: [
         ClipRRect(
-          
           borderRadius: BorderRadius.circular(20),
           child: Image.asset(
             image,
@@ -205,13 +218,17 @@ class PlaceCard extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BlocProvider.value(
-                                    value: getIt<BookingBloc>(),
-                                    child: const BookingView(),
-                                  ),
-                                ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider.value(
+                            value: getIt<BookingBloc>()..add(GetGudiesEvent()),
+                            child: BookingView(
+                              image: image, // Pass the image variable
+                              title: title,
+                              places:places
+                            ),
+                          ),
+                        ));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
@@ -235,6 +252,3 @@ class PlaceCard extends StatelessWidget {
     );
   }
 }
-
-
-
