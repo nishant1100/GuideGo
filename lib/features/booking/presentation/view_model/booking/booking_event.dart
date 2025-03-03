@@ -100,3 +100,9 @@ class UpdateBookingWithGuideEvent extends BookingEvent {
   const UpdateBookingWithGuideEvent(
       {required this.guideId, required this.bookingId});
 }
+
+class GetUserBookingEvent extends BookingEvent {
+  final String userId;
+
+  const GetUserBookingEvent({required this.userId});
+}

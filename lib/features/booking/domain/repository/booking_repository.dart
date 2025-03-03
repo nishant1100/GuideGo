@@ -6,5 +6,6 @@ import 'package:guide_go/features/booking/domain/entity/guide_entity.dart';
 abstract interface class IBookingRepository {
   Future<Either<Failure, void>> book(BookGuideEntity entity);
   Future<Either<Failure, List<GuideEntity>>> getAllGuides();
+  Future<Either<Failure,List<BookGuideEntity>>> getAllUserBookings(String userId);
 
 }

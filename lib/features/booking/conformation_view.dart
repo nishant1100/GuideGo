@@ -32,7 +32,7 @@ class _ConfirmationViewState extends State<ConfirmationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Hiring Deatils"),
+        title: const Text("Make Payment"),
         backgroundColor: const Color(0xFF9C27B0),
         elevation: 0,
       ),
@@ -140,7 +140,7 @@ class _ConfirmationViewState extends State<ConfirmationView> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF9C27B0),
                         ),
-                        child: const Text("Confirm Hiring", style: TextStyle(color: Colors.white)),
+                        child: const Text("Make Payment", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],
@@ -205,6 +205,40 @@ class _ConfirmationViewState extends State<ConfirmationView> {
     );
   }
 
+  // Process Payment Function
+  // void processPayment() {
+  //   if (otpController.text.isEmpty) {
+  //     showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //               title: const Text("Error"),
+  //               content: const Text("Please enter your OTP"),
+  //               actions: [
+  //                 TextButton(
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                     },
+  //                     child: const Text("OK"))
+  //               ],
+  //             ));
+  //     return;
+  //   }
+
+  //   // Show success message
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //             title: const Text("Success"),
+  //             content: Text("Payment completed via $selectedPayment."),
+  //             actions: [
+  //               TextButton(
+  //                   onPressed: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: const Text("OK"))
+  //             ],
+  //           ));
+  // }
   void showSuccessModal(BuildContext context) {
   showDialog(
     context: context,
@@ -214,7 +248,7 @@ class _ConfirmationViewState extends State<ConfirmationView> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        title: const Text("Hiring Successful"),
+        title: const Text("Payment Successful"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

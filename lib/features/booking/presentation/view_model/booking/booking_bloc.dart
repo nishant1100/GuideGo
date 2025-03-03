@@ -3,21 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/core/app_theme/common/snackbar/my_snackbar.dart';
 import 'package:guide_go/features/booking/domain/use_case/booking_usecase.dart';
 import 'package:guide_go/features/booking/domain/use_case/get_all_guides_usecase.dart';
+import 'package:guide_go/features/booking/domain/use_case/get_all_user_bookings.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_event.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_state.dart';
 
 class BookingBloc extends Bloc<BookingEvent, BookingState> {
   final BookingUsecase _bookingUsecase;
   final GetAllGuidesUsecase _getAllGuidesUsecase;
+  final GetAllUserBookingsUsecase _getAllUserBookingsUsecase;
 
   BookingBloc({
     required BookingUsecase bookingUsecase,
+    required GetAllUserBookingsUsecase getAllUserBookingsUseCase,
     required GetAllGuidesUsecase getAllGuidesUsecase,
   })  : _bookingUsecase = bookingUsecase,
+        _getAllUserBookingsUsecase = getAllUserBookingsUseCase,
         _getAllGuidesUsecase = getAllGuidesUsecase,
         super(const BookingState.initial()) {
     on<BookGuideEvent>(_onBookEvent);
     on<GetGudiesEvent>(_getGuides);
+    on<GetUserBookingEvent>(_onGetBookingsEvent);
     // add(GetGudiesEvent());
   }
 
@@ -75,6 +80,24 @@ class BookingBloc extends Bloc<BookingEvent, BookingState> {
         pickupType: state.pickupType,
       ));
     });
+  }
+
+    void _onGetBookingsEvent(
+    GetUserBookingEvent event,
+    Emitter<BookingState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+
+    // Combine selected guide ID with booking details
+    final result = await _getAllUserBookingsUsecase.call(GetAllUserBookingsPrams(userId: event.userId!));
+
+    result.fold(
+      (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
+      (r) {
+        print('Fetched bookings: $r');
+        emit(state.copyWith(isLoading: false, isSuccess: true,booking: r));
+      },
+    );
   }
 
 

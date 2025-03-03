@@ -12,7 +12,7 @@ class BookingState extends Equatable {
   final String pickupLocation;
   final bool bookDetailset;
   final String? bookingId;
-  final BookGuideEntity booking;
+  final List<BookGuideEntity> booking;
 
   final String? guideId;
   final String? guidePrice;
@@ -46,7 +46,7 @@ class BookingState extends Equatable {
         guideImage = '',
         guideName = '',
         guidePrice = '',
-        booking = const BookGuideEntity.initial(),
+        booking = const [],
         pickupDate = '',
         pickupTime = '',
         bookingId = '',
@@ -65,7 +65,7 @@ class BookingState extends Equatable {
     String? pickupDate,
     String? pickupTime,
     bool? bookDetailset,
-    BookGuideEntity? booking,
+    List<BookGuideEntity>? booking,
     String? bookingId,
     String? noofPeople,
     List<GuideEntity>? guides,

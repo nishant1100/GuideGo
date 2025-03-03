@@ -5,47 +5,42 @@ import 'package:guide_go/core/error/failure.dart';
 import 'package:guide_go/features/auth/data/data_source/local_data_source/auth_local_data_source.dart';
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
 import 'package:guide_go/features/auth/domain/repository/auth_repository.dart';
+import 'package:guide_go/features/booking/data/data_source/local_data_source/book_guide_local_data_source.dart';
+import 'package:guide_go/features/booking/domain/entity/book_guide_entity.dart';
+import 'package:guide_go/features/booking/domain/entity/guide_entity.dart';
+import 'package:guide_go/features/booking/domain/repository/booking_repository.dart';
 
-class BookingLocalRepository implements IAuthRepository {
-  final BookingLocalDataSource _authLocalDataSource;
+class BookingLocalRepository implements IBookingRepository {
+  final BookGuideLocalDataSource bookguideLocalDatasource ;
 
-  BookingLocalRepository(this._authLocalDataSource);
+  BookingLocalRepository(this.bookguideLocalDatasource);
 
   @override
-  Future<Either<Failure, BookingEntity>> getCurrentUser() async {
+  Future<Either<Failure, void>> book(BookGuideEntity entity) async{
     try {
-      final currentUser = await _authLocalDataSource.getCurrentUser();
-      return Right(currentUser);
+      await bookguideLocalDatasource.bookGuide(entity);
+      return const Right(null);
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, String>> loginUser(
-    String email,
-    String password,
-  ) async {
-    try {
-      final token = await _authLocalDataSource.loginUser(email, password);
-      return Right(token);
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> registerUser(BookingEntity user) async {
-    try {
-      return Right(_authLocalDataSource.registerUser(user));
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> uploadProfilePicture(File file) async {
-    // TODO: implement uploadProfilePicture
+  Future<Either<Failure, List<GuideEntity>>> getAllGuides() {
+    // TODO: implement getAllGuides
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, List<BookGuideEntity>>> getAllUserBookings(String userId)async {
+       try {
+      final bookings = await bookguideLocalDatasource.getUserBookings(userId);
+      return Right(bookings);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  
+
 }

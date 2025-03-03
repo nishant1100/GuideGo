@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/app/di/di.dart';
+import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
 import 'package:guide_go/features/booking/conformation_view.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_event.dart';
@@ -315,7 +316,7 @@ class _BookingViewState extends State<BookingView> {
 
                     /// Hire a Guide Button
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (selectedGuideId == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -323,29 +324,59 @@ class _BookingViewState extends State<BookingView> {
                           );
                           return;
                         }
+                        final tokenPrefs = getIt<TokenSharedPrefs>();
+                        final result = await tokenPrefs.getUserData();
 
-                        context.read<BookingBloc>().add(BookGuideEvent(
-                              context: context,
-                              pickupDate: selectedDate.toString(),
-                              pickupTime: selectedTime.toString(),
-                              noofPeople: peopleCount.toString(),
-                              pickupType: pickupType,
-                              userId: "67b89dc6a2e9623437d7cb2f",
-                              guideId: selectedGuideId!,
-                              pickupLocation: meetupPointController.text,
-                            ));
+                        result.fold(
+                          (failure) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      "Error fetching user data: ${failure.message}")),
+                            );
+                          },
+                          (data) {
+                            final userId = data[
+                                'userId']; // Extract userId from SharedPreferences
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
+                            if (userId == null || userId.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "User ID not found. Please log in again.")),
+                              );
+                              return;
+                            }
+
+                            // Dispatch the booking event with the retrieved userId
+                            context.read<BookingBloc>().add(BookGuideEvent(
+                                  context: context,
+                                  pickupDate: selectedDate.toString(),
+                                  pickupTime: selectedTime.format(context),
+                                  noofPeople: peopleCount.toString(),
+                                  pickupType: pickupType,
+                                  userId: userId, // ✅ Pass retrieved userId
+                                  guideId: selectedGuideId!,
+                                  pickupLocation: meetupPointController.text,
+                                ));
+
+                            // Navigate to confirmation screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
                                 builder: (context) => ConfirmationView(
-                                    guideName: guideName,
-                                    guideImage: guideImage,
-                                    selectedDate: selectedDate,
-                                    selectedTime: selectedTime,
-                                    meetupPoint: meetupPointController.text,
-                                    pickupType: pickupType,
-                                    totalAmount: double.parse(guidePrice))));
+                                  guideName: guideName,
+                                  guideImage: guideImage,
+                                  selectedDate: selectedDate,
+                                  selectedTime: selectedTime,
+                                  meetupPoint: meetupPointController.text,
+                                  pickupType: pickupType,
+                                  totalAmount: double.parse(guidePrice),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9C27B0),

@@ -29,6 +29,16 @@ class BookingRemoteRepository implements IBookingRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<BookGuideEntity>>> getAllUserBookings(String userId) async{
+    try {
+      final bookings = await bookingRemoteDataSource.getUserBookings(userId);
+      return Right(bookings);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 
  
 }

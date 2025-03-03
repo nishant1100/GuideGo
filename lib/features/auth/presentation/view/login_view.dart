@@ -34,7 +34,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF9C27B0), // Matches the gradient color
+        backgroundColor: const Color(0xFFF13E3E), // Matches the gradient color
         elevation: 0, // Removes shadow for a clean look
         toolbarHeight: 0, // Hides the toolbar to only color the top area
       ),
@@ -46,7 +46,7 @@ class _LoginViewState extends State<LoginView> {
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF9C27B0), Color(0xFF2196F3)],
+                    colors: [Color(0xFFF13E3E), Color(0xFF1434E9)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -208,7 +208,7 @@ class _LoginViewState extends State<LoginView> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF9C27B0),
+                          backgroundColor: const Color(0x9DEB3838),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

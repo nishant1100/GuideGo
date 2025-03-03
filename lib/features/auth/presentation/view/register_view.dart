@@ -84,7 +84,7 @@ checkCameraPermission() async {
             child: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF9C27B0), Color(0xFF2196F3)],
+                  colors: [Color(0xFFF13E3E), Color(0xFF1434E9)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -272,7 +272,7 @@ checkCameraPermission() async {
                             const SizedBox(height: 5),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF9C27B0),
+                                backgroundColor: const Color(0x9DEB3838),
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(

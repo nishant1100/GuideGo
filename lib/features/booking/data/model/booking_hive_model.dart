@@ -1,24 +1,32 @@
 import 'package:equatable/equatable.dart';
+import 'package:guide_go/app/constants/hive_table_constant.dart';
 import 'package:guide_go/features/booking/domain/entity/book_guide_entity.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
+part 'booking_hive_model.g.dart';
 
-part 'booking_api_model.g.dart';
-
-@JsonSerializable()
-class BookingApiModel extends Equatable {
-  @JsonKey(name: '_id')
+@HiveType(typeId: HiveTableConstant.bookingTableId)
+class BookingHiveModel extends Equatable {
+  @HiveField(0)
   final String? id;
+  @HiveField(1)
   final String? userId;
+  @HiveField(2)
   final String pickupDate;
+  @HiveField(3)
   final String pickupTime;
+  @HiveField(4)
   final String noofPeople;
+  @HiveField(5)
   final dynamic guideId; // Change to dynamic to handle both Map and String
+  @HiveField(6)
   final String pickupType;
+  @HiveField(7)
   final String pickupLocation;
 
-  const BookingApiModel({
-    this.id,
+  BookingHiveModel({
+    String? id,
     this.userId,
     this.guideId,
     required this.pickupDate,
@@ -26,29 +34,16 @@ class BookingApiModel extends Equatable {
     required this.noofPeople,
     required this.pickupType,
     required this.pickupLocation,
-  });
-
-  factory BookingApiModel.fromJson(Map<String, dynamic> json) {
-    return BookingApiModel(
-      id: json['_id'],
-      userId: json['userId'] is Map<String, dynamic> ? json['userId']['_id'] : json['userId'], // Handle nested userId
-      guideId: json['guideId'], // Directly assign the nested guideId object
-      pickupDate: json['pickupDate'] ?? '',
-      pickupTime: json['pickupTime'] ?? '',
-      noofPeople: json['noofPeople'] ?? '',
-      pickupType: json['pickupType'] ?? '',
-      pickupLocation: json['pickupLocation'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() => _$BookingApiModelToJson(this);
+  }) : id = id ?? const Uuid().v4();
 
   // Convert to entity
   BookGuideEntity toEntity() {
     return BookGuideEntity(
       id: id,
       userId: userId,
-      guide: guideId is Map<String, dynamic> ? guideId : null, // Ensure guide is a Map
+      guide: guideId is Map<String, dynamic>
+          ? guideId
+          : null, // Ensure guide is a Map
       pickupDate: pickupDate,
       pickupTime: pickupTime,
       noofPeople: noofPeople,
@@ -58,8 +53,8 @@ class BookingApiModel extends Equatable {
   }
 
   // Convert from entity
-  factory BookingApiModel.fromEntity(BookGuideEntity entity) {
-    return BookingApiModel(
+  factory BookingHiveModel.fromEntity(BookGuideEntity entity) {
+    return BookingHiveModel(
       id: entity.id,
       userId: entity.userId,
       guideId: entity.guide,
@@ -69,6 +64,15 @@ class BookingApiModel extends Equatable {
       pickupType: entity.pickupType,
       noofPeople: entity.noofPeople,
     );
+  }
+
+      static List<BookGuideEntity> toEntityList(List<BookingHiveModel> entityList) {
+    return entityList.map((data) => data.toEntity()).toList();
+  }
+    static List<BookingHiveModel> fromEntityList(List<BookGuideEntity> entityList) {
+    return entityList
+        .map((entity) => BookingHiveModel.fromEntity(entity))
+        .toList();
   }
 
   @override

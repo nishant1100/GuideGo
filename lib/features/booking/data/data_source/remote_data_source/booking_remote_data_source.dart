@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:guide_go/app/constants/api_endpoints.dart';
 import 'package:guide_go/features/booking/data/data_source/booking_data_source.dart';
 import 'package:guide_go/features/booking/data/dto/get_all_guides_dto.dart';
+import 'package:guide_go/features/booking/data/dto/get_booking_dto.dart';
 import 'package:guide_go/features/booking/data/model/booking_api_model.dart';
 import 'package:guide_go/features/booking/domain/entity/book_guide_entity.dart';
 import 'package:guide_go/features/booking/domain/entity/guide_entity.dart';
@@ -21,7 +22,7 @@ class BookingRemoteDataSource implements IBookingDataSource {
         "pickupLocation": entity.pickupLocation,
         "pickupType": entity.pickupType,
         "noofPeople": entity.noofPeople,
-        "guideId":entity.guideId
+        "guideId": entity.guide
       });
       if (response.statusCode == 201) {
         return;
@@ -77,6 +78,30 @@ class BookingRemoteDataSource implements IBookingDataSource {
     }
   }
 
+  @override
+  Future<List<BookGuideEntity>> getUserBookings(String userId) async {
+    try {
+      var response = await _dio.get('${ApiEndpoints.getUserBookings}$userId');
 
+      if (response.statusCode == 200) {
+        List<dynamic> bookingdata = response.data;
+        print('data from api ${bookingdata}');
+        List<GetBookingDto> bookingDto =
+            bookingdata.map((e) => GetBookingDto.fromJson(e)).toList();
 
+            print('dto ma convert vako data ${bookingDto}');
+        List<BookGuideEntity> bookings = bookingDto
+            .map((e) => BookingApiModel.fromJson(e.toJson()).toEntity())
+            .toList();
+
+        return bookings;
+      } else {
+        throw Exception("Failed to fetch bookings");
+      }
+    } on DioException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

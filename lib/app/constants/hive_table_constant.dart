@@ -7,6 +7,10 @@ class HiveTableConstant {
   // static const int batchTableId = 1;
   // static const String batchBox = 'batchBox';
 
+
+  static const int bookingTableId =1;
+  static const String bookingBox = 'bookingBox';
+
   // static const int courseTableId = 2;
   // static const String courseBox = 'courseBox';
 

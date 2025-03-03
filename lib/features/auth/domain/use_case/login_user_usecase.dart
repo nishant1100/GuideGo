@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
@@ -10,43 +11,47 @@ class LoginParams extends Equatable {
   final String password;
 
   const LoginParams({required this.username, required this.password});
-  
-  const LoginParams.initial():
-  username='',
-  password='';
-  
-  
+
+  const LoginParams.initial()
+      : username = '',
+        password = '';
+
   @override
-  List<Object?> get props => [username ,password];
+  List<Object?> get props => [username, password];
 }
 
-
-class LoginUsecase implements UsecaseWithParams<String,LoginParams>{
+class LoginUsecase implements UsecaseWithParams<Map<String, dynamic>, LoginParams> {
   final IAuthRepository repository;
-  //final TokenSharedPrefs tokenSharedPrefs;
-  //,this.tokenSharedPrefs
+  final TokenSharedPrefs tokenSharedPrefs;
 
-  LoginUsecase(this.repository);
+  LoginUsecase(this.repository, this.tokenSharedPrefs);
 
   @override
-  Future<Either<Failure, String>> call(LoginParams params) {
-// IF api then store token in shared preferences
-        return repository.loginUser(params.username, params.password);
+  Future<Either<Failure, Map<String, dynamic>>> call(LoginParams params) async {
+    final result = await repository.loginUser(params.username, params.password);
 
- 
-    }  
+    return result.fold(
+      (failure) => Left(failure),
+      (jsonString) {
+        try {
+          final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
+
+          // Extract token & userId from API response
+          final String token = jsonMap['token'] ?? '';
+          final String userId = jsonMap['userId'] ?? '';
+
+          // Store token and userId in SharedPreferences
+          tokenSharedPrefs.saveToken(token);
+          tokenSharedPrefs.saveUserData({
+            'userId': userId,
+            'refreshToken': token, // Storing token as refreshToken for now
+          });
+
+          return Right(jsonMap);
+        } catch (e) {
+          return Left(ApiFailure(message: 'Failed to parse login response: $e'));
+        }
+      },
+    );
+  }
 }
-
-    // return repository.loginUser(params.username, params.password).then(
-    //   (value){
-    //     return value.fold((failure)=>Left(failure),
-    //      (token){
-    //       tokenSharedPrefs.saveToken(token);
-    //       tokenSharedPrefs.getToken().then((value){
-    //         print(value);
-    //       });
-    //       return Right(token);
-    //      }
-    //      );
-    //   }
-    // ); 

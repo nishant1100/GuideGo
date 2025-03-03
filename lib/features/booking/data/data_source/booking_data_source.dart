@@ -10,6 +10,7 @@ abstract interface class IBookingDataSource {
   Future<List<GuideEntity>> getAllGuides();
 
   // Future<BookingEntity> getCurrentUser();
+  Future<List<BookGuideEntity>> getUserBookings(String userId);
 
   // Future<String> uploadProfilePicture(File file);
 }

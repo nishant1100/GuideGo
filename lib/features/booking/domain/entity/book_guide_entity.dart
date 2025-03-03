@@ -8,7 +8,7 @@ class BookGuideEntity extends Equatable {
   final String noofPeople;
   final String pickupType;
   final String pickupLocation;
-  final String? guideId;
+  final dynamic? guide;
 
   const BookGuideEntity(
       {this.id,
@@ -16,12 +16,12 @@ class BookGuideEntity extends Equatable {
       required this.pickupDate,
       required this.pickupTime,
       required this.noofPeople,
-      this.guideId,
+      this.guide,
       required this.pickupType,
       required this.pickupLocation});
 
   const BookGuideEntity.initial()
-      : guideId = '',
+      : guide = '',
         id = '',
         userId = '',
         pickupDate = '',
@@ -38,6 +38,6 @@ class BookGuideEntity extends Equatable {
         pickupTime,
         noofPeople,
         pickupType,
-        guideId
+        guide
       ];
 }

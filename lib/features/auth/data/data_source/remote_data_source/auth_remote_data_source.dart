@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -21,7 +22,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
       Response response = await _dio.post(ApiEndpoints.loginUser,
           data: {"username": username, "password": password});
       if (response.statusCode == 200) {
-        return "logged in sucessfully";
+        return jsonEncode(response.data);
       } else {
         throw Exception(response.statusMessage);
       }

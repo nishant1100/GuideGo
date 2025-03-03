@@ -10,7 +10,7 @@ BookingApiModel _$BookingApiModelFromJson(Map<String, dynamic> json) =>
     BookingApiModel(
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
-      guideId: json['guideId'] as String?,
+      guideId: json['guideId'],
       pickupDate: json['pickupDate'] as String,
       pickupTime: json['pickupTime'] as String,
       noofPeople: json['noofPeople'] as String,

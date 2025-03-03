@@ -16,7 +16,7 @@ class TokenSharedPrefs {
     }
   }
 
-  Future<Either<Failure, void>> getToken() async {
+  Future<Either<Failure, String>> getToken() async {
     try {
       final token = _sharedPreferences.getString('token');
       return Right(token ?? '');
@@ -24,4 +24,27 @@ class TokenSharedPrefs {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
   }
- }
+
+Future<Either<Failure, void>> saveUserData(Map<String, dynamic> userData) async {
+  try {
+    await _sharedPreferences.setString('userId', userData['userId']);
+    if (userData.containsKey('refreshToken')) {
+      await _sharedPreferences.setString('refreshToken', userData['refreshToken']);
+    }
+    return Right(null);
+  } catch (e) {
+    return Left(SharedPrefsFailure(message: e.toString()));
+  }
+}
+
+  Future<Either<Failure, Map<String, String>>> getUserData() async {
+    try {
+      final data = {
+        'userId': _sharedPreferences.getString('userId') ?? '',
+      };
+      return Right(data);
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
+  }
+}

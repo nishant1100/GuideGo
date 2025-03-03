@@ -55,9 +55,9 @@ class HomeView extends StatelessWidget {
             index: state.selectedIndex,
             items: const [
               Icon(Icons.home, size: 30, color: Colors.black),
-              Icon(Icons.bookmark_add, size: 30, color: Colors.black),
+              Icon(Icons.place, size: 30, color: Colors.black),
+              Icon(Icons.rocket_launch_sharp, size: 30, color: Colors.black),
               Icon(Icons.person, size: 30, color: Colors.black),
-              Icon(Icons.diversity_3, size: 30, color: Colors.black),
             ],
             onTap: (index) {
               context.read<HomeCubit>().onTabTapped(index);
