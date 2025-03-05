@@ -7,5 +7,6 @@ abstract interface class IBookingRepository {
   Future<Either<Failure, void>> book(BookGuideEntity entity);
   Future<Either<Failure, List<GuideEntity>>> getAllGuides();
   Future<Either<Failure,List<BookGuideEntity>>> getAllUserBookings(String userId);
+  Future<Either<Failure,void>> deleteBooking(String bookingId);
 
 }

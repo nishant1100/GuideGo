@@ -1,5 +1,3 @@
-
-import 'package:guide_go/features/booking/data/dto/get_all_guides_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
@@ -12,59 +10,73 @@ class GetBookingDto {
   final String noofPeople;
   final String pickupType;
   final String pickupLocation;
-  final dynamic guide; // Can be either string ID or Map<String, dynamic>
+  final String?placeImage;
+
+  // Guide Fields
+  final String? guideId;
+  final String? guideName;
+  final num? guidePrice;
+  final String? guideImage;
+  final String? guideAvailability;
 
   GetBookingDto({
     this.id,
     this.userId,
+    this.placeImage,
     required this.pickupDate,
     required this.pickupTime,
     required this.noofPeople,
     required this.pickupType,
     required this.pickupLocation,
-    required this.guide,
+    this.guideId,
+    this.guideName,
+    this.guidePrice,
+    this.guideImage,
+    this.guideAvailability,
   });
 
   // Create from API JSON response
   factory GetBookingDto.fromJson(Map<String, dynamic> json) {
-    // Check if guideId is a map (object) or string
-    dynamic guideData = json['guideId'];
-    dynamic processedGuideData;
-
-    if (guideData is Map<String, dynamic>) {
-      // It's a guide object, keep it as a Map
-      processedGuideData = guideData;
-    } else {
-      // It's just an ID string
-      processedGuideData = guideData?.toString() ?? '';
-    }
+    final guideData = json['guideId'];
 
     return GetBookingDto(
       id: json['_id'],
-      userId: json['userId'] is Map<String, dynamic> ? json['userId']['_id'] : json['userId'], // Handle nested userId
+      userId: json['userId'] is Map<String, dynamic> ? json['userId']['_id'] : json['userId'],
       pickupDate: json['pickupDate'] ?? '',
       pickupTime: json['pickupTime'] ?? '',
+      placeImage: json['placeImage']?? '',
       noofPeople: json['noofPeople'] ?? '',
       pickupType: json['pickupType'] ?? '',
       pickupLocation: json['pickupLocation'] ?? '',
-      guide: processedGuideData,
+      
+      // Extract guide details
+      guideId: guideData is Map<String, dynamic> ? guideData['_id'] : guideData?.toString(),
+      guideName: guideData is Map<String, dynamic> ? guideData['full_name'] : null,
+      guidePrice: guideData is Map<String, dynamic> ? guideData['price'] : null,
+      guideImage: guideData is Map<String, dynamic> ? guideData['image'] : null,
+      guideAvailability: guideData is Map<String, dynamic> ? guideData['avaiable'] : null,
     );
   }
 
-  // Convert to JSON for API requests
+  // ✅ **Fix: Convert guide details properly when sending to BookingApiModel**
   Map<String, dynamic> toJson() {
-    // If guideId is a Map, only send the ID for requests
-    String effectiveGuideId = guide is Map<String, dynamic> ? guide['_id'] : guide;
-
     return {
       if (id != null) '_id': id,
       if (userId != null) 'userId': userId,
       'pickupDate': pickupDate,
       'pickupTime': pickupTime,
       'noofPeople': noofPeople,
+      'placeImage':placeImage,
       'pickupType': pickupType,
       'pickupLocation': pickupLocation,
-      'guideId': effectiveGuideId,
+      if (guideId != null)
+        'guideId': {
+          '_id': guideId,
+          'full_name': guideName,
+          'price': guidePrice,
+          'image': guideImage,
+          'avaiable': guideAvailability,
+        },
     };
   }
 }

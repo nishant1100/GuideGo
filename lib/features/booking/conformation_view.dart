@@ -32,7 +32,7 @@ class _ConfirmationViewState extends State<ConfirmationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Make Payment"),
+        title: const Text("Your Hiring Details"),
         backgroundColor: const Color(0xFF9C27B0),
         elevation: 0,
       ),
@@ -140,7 +140,7 @@ class _ConfirmationViewState extends State<ConfirmationView> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF9C27B0),
                         ),
-                        child: const Text("Make Payment", style: TextStyle(color: Colors.white)),
+                        child: const Text("Confirm Hiring", style: TextStyle(color: Colors.white, fontSize: 18)),
                       ),
                     ),
                   ],
@@ -248,13 +248,13 @@ class _ConfirmationViewState extends State<ConfirmationView> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        title: const Text("Payment Successful"),
+        title: const Text("Hiring Successful"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.check_circle, color: Colors.green, size: 60),
             const SizedBox(height: 10),
-            const Text("Your booking has been confirmed."),
+            const Text("Your tour has been confirmed."),
             const SizedBox(height: 10),
             Text("Guide: ${widget.guideName}", style: const TextStyle(fontWeight: FontWeight.bold)),
             Text("Total: NRP ${widget.totalAmount}", style: const TextStyle(fontWeight: FontWeight.bold)),

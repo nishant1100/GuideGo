@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:guide_go/app/constants/api_endpoints.dart';
 import 'package:guide_go/features/booking/data/data_source/booking_data_source.dart';
 import 'package:guide_go/features/booking/data/dto/get_all_guides_dto.dart';
-import 'package:guide_go/features/booking/data/dto/get_booking_dto.dart';
 import 'package:guide_go/features/booking/data/model/booking_api_model.dart';
 import 'package:guide_go/features/booking/domain/entity/book_guide_entity.dart';
 import 'package:guide_go/features/booking/domain/entity/guide_entity.dart';
@@ -18,6 +17,7 @@ class BookingRemoteDataSource implements IBookingDataSource {
       Response response = await _dio.post(ApiEndpoints.bookGuide, data: {
         "userId": entity.userId,
         "pickupDate": entity.pickupDate,
+        'placeImage': entity.placeImage,
         "pickupTime": entity.pickupTime,
         "pickupLocation": entity.pickupLocation,
         "pickupType": entity.pickupType,
@@ -84,15 +84,18 @@ class BookingRemoteDataSource implements IBookingDataSource {
       var response = await _dio.get('${ApiEndpoints.getUserBookings}$userId');
 
       if (response.statusCode == 200) {
-        List<dynamic> bookingdata = response.data;
-        print('data from api ${bookingdata}');
-        List<GetBookingDto> bookingDto =
-            bookingdata.map((e) => GetBookingDto.fromJson(e)).toList();
+        List<dynamic> bookingData = response.data;
+        print('Data from API: $bookingData');
 
-            print('dto ma convert vako data ${bookingDto}');
-        List<BookGuideEntity> bookings = bookingDto
-            .map((e) => BookingApiModel.fromJson(e.toJson()).toEntity())
-            .toList();
+        // Map API data to BookingApiModel
+        List<BookingApiModel> bookingModels =
+            bookingData.map((e) => BookingApiModel.fromJson(e)).toList();
+
+        print('Data converted to BookingApiModel: $bookingModels');
+
+        // Convert BookingApiModel to BookGuideEntity
+        List<BookGuideEntity> bookings =
+            bookingModels.map((e) => e.toEntity()).toList();
 
         return bookings;
       } else {
@@ -100,6 +103,22 @@ class BookingRemoteDataSource implements IBookingDataSource {
       }
     } on DioException catch (e) {
       throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  
+  @override
+  Future<void> deleteBooking(String bookingId)async {
+   try {
+      Response response = await _dio.delete('${ApiEndpoints.deleteBooking}${bookingId}');
+      if (response.statusCode == 201) {
+        return;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
     } catch (e) {
       throw Exception(e);
     }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:guide_go/core/network/hive_service.dart';
 import 'package:guide_go/features/auth/data/data_source/auth_data_source.dart';
+import 'package:guide_go/features/auth/data/model/auth_api_model.dart';
 import 'package:guide_go/features/auth/data/model/auth_user_model.dart';
 import 'package:guide_go/features/auth/domain/entity/auth_entity.dart';
 
@@ -47,6 +48,18 @@ class BookingLocalDataSource implements IAuthDataSource {
 
   @override
   Future<String> uploadProfilePicture(File file) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthApiModel> getUserData(String userId) {
+    // TODO: implement getUserData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthApiModel> updateProfile(BookingEntity user) {
+    // TODO: implement updateProfile
     throw UnimplementedError();
   }
 }

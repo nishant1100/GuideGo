@@ -9,11 +9,14 @@ import 'package:guide_go/features/auth/data/data_source/remote_data_source/auth_
 import 'package:guide_go/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
 import 'package:guide_go/features/auth/data/repository/auth_remote_repository/auth_remote_repository.dart';
 import 'package:guide_go/features/auth/domain/repository/auth_repository.dart';
+import 'package:guide_go/features/auth/domain/use_case/get_user_data_usecase.dart';
 import 'package:guide_go/features/auth/domain/use_case/login_user_usecase.dart';
 import 'package:guide_go/features/auth/domain/use_case/register_user_usecase.dart';
+import 'package:guide_go/features/auth/domain/use_case/update_user_usecase.dart';
 import 'package:guide_go/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:guide_go/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:guide_go/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:guide_go/features/auth/presentation/view_model/user_bloc.dart';
 import 'package:guide_go/features/booking/data/data_source/local_data_source/book_guide_local_data_source.dart';
 import 'package:guide_go/features/booking/data/data_source/remote_data_source/booking_remote_data_source.dart';
 import 'package:guide_go/features/booking/data/repository/auth_local_repository/booking_local_repository.dart';
@@ -21,6 +24,7 @@ import 'package:guide_go/features/booking/data/repository/booking_remote_reposit
 import 'package:guide_go/features/booking/data/repository/booking_repository_proxy.dart';
 import 'package:guide_go/features/booking/domain/repository/booking_repository.dart';
 import 'package:guide_go/features/booking/domain/use_case/booking_usecase.dart';
+import 'package:guide_go/features/booking/domain/use_case/delete_booking_usecase.dart';
 import 'package:guide_go/features/booking/domain/use_case/get_all_guides_usecase.dart';
 import 'package:guide_go/features/booking/domain/use_case/get_all_user_bookings.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
@@ -113,6 +117,19 @@ __initRegisterDependencies() {
     () => AuthLocalRepository(getIt<BookingLocalDataSource>()),
   );
 
+  
+  getIt.registerLazySingleton<UpdateUserUsecase>(
+    () => UpdateUserUsecase(authRepository: getIt<AuthRemoteRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetUserDataUsecase>(
+      () => GetUserDataUsecase(authRepository: getIt<AuthRemoteRepository>()));
+
+  
+
+  getIt.registerLazySingleton<UserBloc>(
+      () => UserBloc(updateUserUsecase: getIt(), uploadImageUsecase: getIt(),getUserDataUsecase: getIt()));
+
   // Register RegisterUserUsecase
   getIt.registerLazySingleton<RegisterUseCase>(
     () => RegisterUseCase(getIt<AuthRemoteRepository>()),
@@ -170,6 +187,8 @@ _initiBookingDependencies() async {
     );
   });
 
+
+
   // // Register the IBookingRepository
   // getIt.registerLazySingleton<IBookingRepository>(
   //   () => BookingRemoteRepository(bookingRemoteDataSource: getIt<BookingRemoteDataSource>()),
@@ -178,6 +197,9 @@ _initiBookingDependencies() async {
   // Register BookingUsecase
   getIt.registerLazySingleton<BookingUsecase>(
     () => BookingUsecase(repository: getIt<BookingRemoteRepository>()),
+  );
+    getIt.registerLazySingleton<DeleteBookingUsecase>(
+    () => DeleteBookingUsecase(repository: getIt<BookingRemoteRepository>()),
   );
   getIt.registerLazySingleton<GetAllGuidesUsecase>(
       () => GetAllGuidesUsecase(repository: getIt<BookingRemoteRepository>()));
@@ -188,8 +210,10 @@ _initiBookingDependencies() async {
   // Register BookingBloc
   getIt.registerFactory<BookingBloc>(
     () => BookingBloc(
+      deleteBookingUseCase: getIt(),
         bookingUsecase: getIt(),
         getAllUserBookingsUseCase: getIt(),
         getAllGuidesUsecase: getIt()),
+
   );
 }

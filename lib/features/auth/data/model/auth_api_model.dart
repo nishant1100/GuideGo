@@ -17,7 +17,7 @@ class AuthApiModel extends Equatable {
   const AuthApiModel({
     this.id,
     required this.full_name,
-    required this.image,
+     this.image,
     required this.phone,
     required this.username,
     required this.password,
@@ -51,5 +51,5 @@ class AuthApiModel extends Equatable {
   }
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [id,password,username,full_name,phone,image];
 }

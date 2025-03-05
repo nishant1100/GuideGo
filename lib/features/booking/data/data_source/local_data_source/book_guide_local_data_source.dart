@@ -46,4 +46,10 @@ class BookGuideLocalDataSource implements IBookingDataSource {
     print(lest);
     return lest;
   }
+  
+  @override
+  Future<void> deleteBooking(String bookingId) {
+    // TODO: implement deleteBooking
+    throw UnimplementedError();
+  }
 }

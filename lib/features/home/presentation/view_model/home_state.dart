@@ -2,11 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/app/di/di.dart';
+import 'package:guide_go/features/auth/presentation/view/profile_view.dart';
+import 'package:guide_go/features/auth/presentation/view_model/user_bloc.dart';
 import 'package:guide_go/features/booking/presentation/user_bookings_view.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/home/presentation/view/bottom_view/about_us.dart';
 import 'package:guide_go/features/home/presentation/view/bottom_view/dashboard_view.dart';
-import 'package:guide_go/features/home/presentation/view/bottom_view/user_profile.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
@@ -26,8 +27,11 @@ class HomeState extends Equatable {
           create: (context) => getIt<BookingBloc>(),
           child: const DashboardView(),
         ),
-        UserBookingsView(),
-        const UserProfile(),
+        const UserBookingsView(),
+        BlocProvider.value(
+          value: getIt<UserBloc>(),
+          child: const ProfileView(),
+        ),
         const AboutUs(),
       ],
     );

@@ -14,10 +14,12 @@ class BookingParams extends Equatable {
   final String pickupType;
   final String pickupLocation;
   final dynamic guideId;
+  final String? placeImage;
 
   const BookingParams(
       {this.id,
       this.userId,
+      this.placeImage,
       required this.pickupDate,
       required this.pickupTime,
       required this.noofPeople,
@@ -41,6 +43,7 @@ class BookingUsecase implements UsecaseWithParams<void, BookingParams> {
           userId: params.userId,
           pickupDate: params.pickupDate,
           pickupTime: params.pickupTime,
+          placeImage: params.placeImage,
           noofPeople: params.noofPeople,
           guide: params.guideId,
           pickupType: params.pickupType,

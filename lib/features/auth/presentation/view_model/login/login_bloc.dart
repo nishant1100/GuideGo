@@ -43,7 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(state.copyWith(isLoading: false, isSuccess: false));
         showMySnackBar(
           context: event.context,
-          message: failure.message ?? "Login failed",
+          message: "Username or password is incorrect",
           color: Colors.red,
         );
       }, (loginresponse) async {
@@ -68,7 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       });
     });
     on<NavigateHomeScreenEvent>((event, emit) {
-      Navigator.push(
+      Navigator.pushReplacement(
           event.context,
           MaterialPageRoute(
             builder: (context) =>
@@ -76,7 +76,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           ));
     });
     on<NavigateRegisterScreenEvent>((event, emit) {
-      Navigator.push(
+      Navigator.pushReplacement(
           event.context,
           MaterialPageRoute(
             builder: (context) => BlocProvider.value(

@@ -11,6 +11,8 @@ abstract interface class IBookingDataSource {
 
   // Future<BookingEntity> getCurrentUser();
   Future<List<BookGuideEntity>> getUserBookings(String userId);
+    Future<void> deleteBooking(String bookingId);
+
 
   // Future<String> uploadProfilePicture(File file);
 }

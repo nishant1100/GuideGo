@@ -11,5 +11,6 @@ abstract interface class IAuthRepository {
 
   Future<Either<Failure, String>> uploadProfilePicture(File file);
 
-  Future<Either<Failure, BookingEntity>> getCurrentUser();
+    Future<Either<Failure, BookingEntity>> updateProfile(BookingEntity user);
+  Future<Either<Failure, BookingEntity>> getUserdata(String userId);
 }

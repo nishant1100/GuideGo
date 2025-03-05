@@ -1,3 +1,4 @@
+import 'package:guide_go/features/booking/data/model/guide_api_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'get_all_guides_dto.g.dart';

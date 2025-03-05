@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guide_go/app/constants/api_endpoints.dart';
 import 'package:guide_go/app/di/di.dart';
 import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
 import 'package:guide_go/features/booking/conformation_view.dart';
@@ -76,12 +77,7 @@ class _BookingViewState extends State<BookingView> {
             children: [
               Stack(
                 children: [
-                  Image.asset(
-                    widget.image,
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                  _buildImageWidget(widget.image),
                   Positioned(
                     bottom: 16,
                     left: 16,
@@ -291,7 +287,7 @@ class _BookingViewState extends State<BookingView> {
                                 return GuideCard(
                                   name: guide.full_name,
                                   image: guide.image,
-                                  rating: 2.3,
+                                  rating: 4.3,
                                   onBookNow: () {
                                     setState(() {
                                       selectedGuideId = guide.guideId;
@@ -351,6 +347,7 @@ class _BookingViewState extends State<BookingView> {
                             // Dispatch the booking event with the retrieved userId
                             context.read<BookingBloc>().add(BookGuideEvent(
                                   context: context,
+                                  placeImage: widget.image,
                                   pickupDate: selectedDate.toString(),
                                   pickupTime: selectedTime.format(context),
                                   noofPeople: peopleCount.toString(),
@@ -396,6 +393,37 @@ class _BookingViewState extends State<BookingView> {
   }
 }
 
+// Helper method to build the image widget
+Widget _buildImageWidget(String imageUrl) {
+  return Image.network(
+    '${ApiEndpoints.imagebaseUrl}$imageUrl', // URL of the image from the API
+    height: 250,
+    width: double.infinity,
+    fit: BoxFit.cover,
+    loadingBuilder: (context, child, loadingProgress) {
+      if (loadingProgress == null) {
+        return child; // Image loaded successfully
+      }
+      // Show a loading placeholder while the image is being fetched
+      return Container(
+        height: 250,
+        width: double.infinity,
+        color: Colors.grey[300],
+        child: const Center(child: CircularProgressIndicator()),
+      );
+    },
+    errorBuilder: (context, error, stackTrace) {
+      // Show a fallback image if the image fails to load
+      return Image.asset(
+        'assets/fallback_image.jpg', // Replace with your fallback image path
+        height: 250,
+        width: double.infinity,
+        fit: BoxFit.cover,
+      );
+    },
+  );
+}
+
 class GuideCard extends StatelessWidget {
   final String name;
   final String image;
@@ -412,55 +440,92 @@ class GuideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white.withOpacity(0.2),
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          CircleAvatar(
-            radius: 45,
-            backgroundImage: AssetImage(image),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4), // Star Rating Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (index) {
-              double starValue = index + 1;
-              return Icon(
-                rating >= starValue
-                    ? Icons.star
-                    : rating >= starValue - 0.5
-                        ? Icons.star_half
-                        : Icons.star_border,
-                color: Colors.orange,
-                size: 18,
-              );
-            }),
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF9C27B0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+    return Flexible(
+      fit: FlexFit.loose,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white.withOpacity(0.2),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              _buildGuideImageWidget(image),
+              const SizedBox(height: 8),
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            onPressed: onBookNow,
-            child: const Text("Select Guide"),
+              const SizedBox(height: 4), // Star Rating Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  double starValue = index + 1;
+                  return Icon(
+                    rating >= starValue
+                        ? Icons.star
+                        : rating >= starValue - 0.5
+                            ? Icons.star_half
+                            : Icons.star_border,
+                    color: Colors.orange,
+                    size: 18,
+                  );
+                }),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF9C27B0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: onBookNow,
+                child: const Text("Select Guide"),
+              ),
+              const SizedBox(height: 8),
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  // Helper method to build the image widget
+  Widget _buildGuideImageWidget(String imageUrl) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(45),
+      child: Image.network(
+        '${ApiEndpoints.imagebaseUrl}$imageUrl', // URL of the image from the API
+        height: 250, // Set a fixed height for the image to prevent overflow
+        width: double.infinity,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child; // Image loaded successfully
+          }
+          // Show a loading placeholder while the image is being fetched
+          return Container(
+            height: 250,
+            width: double.infinity,
+            color: Colors.grey[300],
+            child: const Center(child: CircularProgressIndicator()),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          // Show a fallback image if the image fails to load
+          return Image.asset(
+            'assets/images/360_F_542361185_VFRJWpR2FH5OiAEVveWO7oZnfSccZfD3.jpg',
+            height: 100, // Set fixed height for the placeholder
+            width: double.infinity,
+            fit: BoxFit.cover,
+          );
+        },
       ),
     );
   }

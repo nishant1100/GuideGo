@@ -1,0 +1,2 @@
+C:/nishant/guide_go/android/app/.cxx/Debug/5e5t2q61/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/nishant/guide_go/android/app/.cxx/Debug/5e5t2q61/armeabi-v7a/CMakeFiles/rebuild_cache.dir

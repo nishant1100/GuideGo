@@ -39,6 +39,17 @@ class BookingRemoteRepository implements IBookingRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> deleteBooking(String bookingId)async {
+    try{
+      await bookingRemoteDataSource.deleteBooking(bookingId);
+      return const Right(null);
+    }
+    catch(e){
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 
  
 }

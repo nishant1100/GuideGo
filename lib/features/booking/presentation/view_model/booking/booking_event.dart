@@ -17,6 +17,7 @@ class BookGuideEvent extends BookingEvent {
   final String noofPeople;
   final String? userId;
   final String pickupType;
+  final String? placeImage;
   final String pickupLocation;
   final String? guideId;
 
@@ -24,6 +25,7 @@ class BookGuideEvent extends BookingEvent {
     required this.context,
     required this.pickupDate,
     required this.pickupTime,
+    this.placeImage,
     this.userId,
     this.guideId,
     required this.noofPeople,
@@ -105,4 +107,11 @@ class GetUserBookingEvent extends BookingEvent {
   final String userId;
 
   const GetUserBookingEvent({required this.userId});
+}
+
+class CancelBooking extends BookingEvent {
+  final String bookingId;
+  final BuildContext context;
+
+  const CancelBooking( {required this.bookingId, required this.context});
 }

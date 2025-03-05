@@ -40,6 +40,12 @@ class BookingLocalRepository implements IBookingRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> deleteBooking(String bookingId) {
+    // TODO: implement deleteBooking
+    throw UnimplementedError();
+  }
 
   
 

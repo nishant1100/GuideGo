@@ -7,11 +7,13 @@ class BookGuideEntity extends Equatable {
   final String pickupTime;
   final String noofPeople;
   final String pickupType;
+  final String? placeImage;
   final String pickupLocation;
   final dynamic? guide;
 
   const BookGuideEntity(
       {this.id,
+      this.placeImage,
       this.userId,
       required this.pickupDate,
       required this.pickupTime,
@@ -24,6 +26,7 @@ class BookGuideEntity extends Equatable {
       : guide = '',
         id = '',
         userId = '',
+        placeImage ='',
         pickupDate = '',
         pickupTime = '',
         pickupType = '',
@@ -37,6 +40,7 @@ class BookGuideEntity extends Equatable {
         pickupLocation,
         pickupTime,
         noofPeople,
+        placeImage,
         pickupType,
         guide
       ];

@@ -9,18 +9,20 @@ part 'booking_api_model.g.dart';
 class BookingApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? id;
-  final String? userId;
+  final Map<String, dynamic> userId; // Handle userId as a Map
   final String pickupDate;
   final String pickupTime;
   final String noofPeople;
-  final dynamic guideId; // Change to dynamic to handle both Map and String
+  final Map<String, dynamic> guideId; // Handle guideId as a Map
   final String pickupType;
   final String pickupLocation;
+  final String? placeImage;
 
   const BookingApiModel({
     this.id,
-    this.userId,
-    this.guideId,
+    required this.userId,
+     this.placeImage,
+    required this.guideId,
     required this.pickupDate,
     required this.pickupTime,
     required this.noofPeople,
@@ -31,9 +33,10 @@ class BookingApiModel extends Equatable {
   factory BookingApiModel.fromJson(Map<String, dynamic> json) {
     return BookingApiModel(
       id: json['_id'],
-      userId: json['userId'] is Map<String, dynamic> ? json['userId']['_id'] : json['userId'], // Handle nested userId
-      guideId: json['guideId'], // Directly assign the nested guideId object
+      userId: json['userId'] is Map<String, dynamic> ? json['userId'] : {}, // Ensure userId is a Map
+      guideId: json['guideId'] is Map<String, dynamic> ? json['guideId'] : {}, // Ensure guideId is a Map
       pickupDate: json['pickupDate'] ?? '',
+      placeImage: json['placeImage']?? '',
       pickupTime: json['pickupTime'] ?? '',
       noofPeople: json['noofPeople'] ?? '',
       pickupType: json['pickupType'] ?? '',
@@ -47,11 +50,12 @@ class BookingApiModel extends Equatable {
   BookGuideEntity toEntity() {
     return BookGuideEntity(
       id: id,
-      userId: userId,
-      guide: guideId is Map<String, dynamic> ? guideId : null, // Ensure guide is a Map
+      userId: userId['_id'], // Extract userId from the Map
+      guide: guideId, // Pass the entire guideId Map
       pickupDate: pickupDate,
       pickupTime: pickupTime,
       noofPeople: noofPeople,
+      placeImage:placeImage,
       pickupType: pickupType,
       pickupLocation: pickupLocation,
     );
@@ -61,13 +65,14 @@ class BookingApiModel extends Equatable {
   factory BookingApiModel.fromEntity(BookGuideEntity entity) {
     return BookingApiModel(
       id: entity.id,
-      userId: entity.userId,
-      guideId: entity.guide,
+      userId: {'_id': entity.userId}, // Convert userId back to a Map
+      guideId: entity.guide is Map<String, dynamic> ? entity.guide : {}, // Ensure guide is a Map
       pickupDate: entity.pickupDate,
       pickupLocation: entity.pickupLocation,
       pickupTime: entity.pickupTime,
       pickupType: entity.pickupType,
       noofPeople: entity.noofPeople,
+      placeImage: entity.placeImage,
     );
   }
 
@@ -76,6 +81,7 @@ class BookingApiModel extends Equatable {
         id,
         userId,
         guideId,
+        placeImage,
         pickupDate,
         pickupTime,
         noofPeople,

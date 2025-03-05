@@ -62,4 +62,35 @@ class BookingRepositoryProxy implements IBookingRepository {
       return await localRepository.getAllUserBookings(userId);
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> deleteBooking(String bookingId) async{
+       if (await connectivityListener.isConnected) {
+      try {
+        // Fetch data from the remote repository
+        final result = await remoteRepository.deleteBooking(bookingId);
+        return result;
+        // If the remote fetch is successful, save it to Hive
+        // result.fold(
+        //   (failure) {
+        //     // If there's an error, return it
+        //     return Left(failure);
+        //   },
+        //   (bookings) async {
+        //     // Convert entities to Hive models and store them locally
+        //     final bookingHiveModels = BookingHiveModel.fromEntityList(bookings);
+        //     await hive.saveBookingsToHive(bookingHiveModels);
+        //   },
+        // );
+
+      } catch (e) {
+        // If fetching from remote fails, fallback to local data
+        return localRepository.getAllUserBookings(bookingId);
+      }
+    } else {
+      // No internet, fetch data from the local repository
+      return await localRepository.deleteBooking(bookingId);
+    }
+  
+  }
 }
