@@ -1,0 +1,19 @@
+# Prioritize Dart and de-prioritize other languages
+*.dart linguist-detectable
+
+# Mark C++, CMake, and other unwanted files as 'vendored' (ignored in stats)
+*.cc linguist-vendored
+*.cpp linguist-vendored
+*.h linguist-vendored
+*.c linguist-vendored
+CMakeLists.txt linguist-vendored
+*.cmake linguist-vendored
+*.swift linguist-vendored
+*.html linguist-vendored
+*.js linguist-vendored
+*.xml linguist-vendored
+*.json linguist-vendored
+*.sh linguist-vendored
+*.gradle linguist-vendored
+*.lock linguist-vendored
+*.yaml linguist-vendored
