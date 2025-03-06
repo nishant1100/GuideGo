@@ -16,7 +16,7 @@ import 'package:guide_go/features/auth/domain/use_case/update_user_usecase.dart'
 import 'package:guide_go/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:guide_go/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:guide_go/features/auth/presentation/view_model/signup/register_bloc.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_bloc.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_bloc.dart';
 import 'package:guide_go/features/booking/data/data_source/local_data_source/book_guide_local_data_source.dart';
 import 'package:guide_go/features/booking/data/data_source/remote_data_source/booking_remote_data_source.dart';
 import 'package:guide_go/features/booking/data/repository/auth_local_repository/booking_local_repository.dart';

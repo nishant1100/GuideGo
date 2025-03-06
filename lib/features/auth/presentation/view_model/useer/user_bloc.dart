@@ -3,8 +3,8 @@ import 'package:guide_go/core/app_theme/common/snackbar/my_snackbar.dart';
 import 'package:guide_go/features/auth/domain/use_case/get_user_data_usecase.dart';
 import 'package:guide_go/features/auth/domain/use_case/update_user_usecase.dart';
 import 'package:guide_go/features/auth/domain/use_case/upload_image_usecase.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_event.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_state.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_event.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_state.dart';
 
 
 class UserBloc extends Bloc<UserEvent, UserState> {

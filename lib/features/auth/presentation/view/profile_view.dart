@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/app/di/di.dart';
 import 'package:guide_go/app/shared_prefs/token_shared_prefs.dart';
 import 'package:guide_go/core/app_theme/common/snackbar/my_snackbar.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_bloc.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_event.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_state.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_bloc.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_event.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_state.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileView extends StatelessWidget {

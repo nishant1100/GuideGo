@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guide_go/app/di/di.dart';
 import 'package:guide_go/features/auth/presentation/view/profile_view.dart';
-import 'package:guide_go/features/auth/presentation/view_model/user_bloc.dart';
+import 'package:guide_go/features/auth/presentation/view_model/useer/user_bloc.dart';
 import 'package:guide_go/features/booking/presentation/user_bookings_view.dart';
 import 'package:guide_go/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:guide_go/features/home/presentation/view/bottom_view/about_us.dart';
