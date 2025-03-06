@@ -200,7 +200,7 @@ class ProfileView extends StatelessWidget {
           _buildSettingItem(
             icon: Icons.vpn_key,
             title: 'Password',
-            subtitle: 'Last changed 3 months ago',
+            subtitle: 'Last changed a day ago',
             isEditable: false,
           ),
           _buildSettingItem(
@@ -213,8 +213,8 @@ class ProfileView extends StatelessWidget {
           ),
           _buildSettingItem(
             icon: Icons.login_outlined,
-            title: 'Linked Accounts',
-            subtitle: 'Steam, Xbox, PlayStation',
+            title: 'Link Your Accounts',
+            subtitle: 'Facebook, Google, Twitter',
             isEditable: false,
           ),
         ],
